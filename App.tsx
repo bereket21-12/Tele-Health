@@ -20,10 +20,10 @@ export default function App() {
   const Stack = createStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HealthTipsScreen">
+      <Stack.Navigator initialRouteName="LoginPage">
         
-        <Stack.Screen name="Registration" component={UserRegistrationScreen} />
         <Stack.Screen name="login" component={LoginPage} />
+        <Stack.Screen name="Registration" component={UserRegistrationScreen} />
         <Stack.Screen name="HealthTipsScreen" component={HealthTipsScreen} />
         <Stack.Screen name="HealthRecordScreen" component={HealthRecordScreen} />
         <Stack.Screen name ="EditHealthRecordScreen" component={EditHealthRecordScreen} />

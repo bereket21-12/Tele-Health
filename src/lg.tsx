@@ -5,7 +5,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { db, firebase_auth } from './firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
-const LoginPage = () => {
+const LoginPage = ({navigation}) => {
     const [email , setemail] = useState("")
     const [password , setpassword] = useState("")
   const [rememberMe, setRememberMe] = useState(false);
@@ -17,8 +17,16 @@ const LoginPage = () => {
     //   state: "CA",
     //   country: "USA"
     // });
-    await signInWithEmailAndPassword(firebase_auth, email, password);
-    alert("user loged in")
+    try {
+      const userCredential = await signInWithEmailAndPassword(firebase_auth, email, password);
+      const user = userCredential.user;
+      console.log("User logged in:", user);
+      navigation.navigate('HealthTipsScreen');
+      // User is logged in successfully
+    } catch (error) {
+      console.error("Login error:", error.message);
+      // Handle login error, e.g., display an error message to the user
+    }
   };
 
   const handleSignUp = () => {
