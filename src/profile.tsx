@@ -6,24 +6,27 @@ import { db } from './firebaseConfig';
 const UserProfileScreen =  () => {
 
   const [data, setData] = useState(null);
+  
   useEffect( () => {
      async function dataloader ()  {
 
-      const docRef = doc(db, "user", "berekettadele@gmail.com");
+      const docRef = doc(db, "user", "bereket21cc@outlook.com");
       const docSnap =  await getDoc(docRef);
-    if (docSnap.exists()) {
+      if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
-      console.log(data.name)
       setData(docSnap.data());
-    } else {
+      console.log(data);
+     } else {
       // docSnap.data() will be undefined in this case
       console.log("No such document!");
+     }
     }
-    }
+
     dataloader()
 
     
   }, []);
+
   const handleEditProfile = async () => {
     // Add navigation logic or other actions for editing the profile
     console.log('Edit profile pressed');

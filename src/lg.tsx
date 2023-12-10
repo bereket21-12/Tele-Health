@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { doc, setDoc } from "firebase/firestore"; 
-import { db } from './firebaseConfig';
+import { db, firebase_auth } from './firebaseConfig';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
 const LoginPage = () => {
     const [email , setemail] = useState("")
@@ -10,12 +11,14 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleLogin = async () => {
-    console.log('Login pressed');
-    await setDoc(doc(db, "cities", "LA"), {
-      name: "Los Angeles",
-      state: "CA",
-      country: "USA"
-    });
+    // console.log('Login pressed');
+    // await setDoc(doc(db, "cities", "LA"), {
+    //   name: "Los Angeles",
+    //   state: "CA",
+    //   country: "USA"
+    // });
+    await signInWithEmailAndPassword(firebase_auth, email, password);
+    alert("user loged in")
   };
 
   const handleSignUp = () => {
@@ -26,9 +29,9 @@ const LoginPage = () => {
     console.log('Forgot Password pressed');
   };
 
-  const handleGoogleLogin = () => {
-    console.log('Google Login pressed');
-  };
+  const handleGoogleLogin =async  () => {
+
+}
 
   const handleFacebookLogin = () => {
     console.log('Facebook Login pressed');

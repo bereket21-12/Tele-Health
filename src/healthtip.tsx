@@ -9,6 +9,7 @@ import NotificationScreen from './notification';
 import UserProfileScreen from './profile';
 import ChallengesScreen from './challenges';
 import HomeScreen from './home';
+import LoginPage from './lg';
 
 const Tab = createBottomTabNavigator();
         
@@ -95,8 +96,8 @@ const HealthTipsScreen = () => {
                   />
  
                 <Tab.Screen
-                    name="ChallengesScreen"
-                    component={ChallengesScreen}
+                    name="login"
+                    component={LoginPage}
                     options={{
                     tabBarLabel: 'ChallengesScreen',
                     tabBarIcon: ({ color, size }) => (
