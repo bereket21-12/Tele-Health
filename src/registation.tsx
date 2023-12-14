@@ -4,7 +4,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 
 import RNPickerSelect from 'react-native-picker-select';
 import { db } from './firebaseConfig';
 
-const UserRegistrationScreen = () => {
+const UserRegistrationScreen = ({navigation}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,6 +25,7 @@ const UserRegistrationScreen = () => {
       height: height,
       weight: weight
     });
+    navigation.navigate('LoginPage');
   };
 
   return (
