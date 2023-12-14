@@ -1,27 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 
-const challenges = [
-  {
-    id: '1',
-    title: '30-Day Yoga Challenge',
-    description: 'Improve flexibility and mindfulness with daily yoga sessions.',
-    image: 'https://placekitten.com/300/200', // Replace with actual challenge image URL
-  },
-  {
-    id: '2',
-    title: 'Run 5K Every Day',
-    description: 'Boost your cardiovascular health by running a 5K every day.',
-    image: 'https://placekitten.com/300/201', // Replace with actual challenge image URL
-  },
-  // Add more challenges as needed
-];
-
 const ChallengesScreen = ({ navigation }) => {
+  const [data, setHealthRecords] = useState([
+    {
+      id: '1',
+      title: '30-Day Yoga Challenge',
+      description: 'Improve flexibility and mindfulness with daily yoga sessions.',
+      image: 'https://placekitten.com/300/200', // Replace with actual challenge image URL
+    },
+    {
+      id: '2',
+      title: 'Run 5K Every Day',
+      description: 'Boost your cardiovascular health by running a 5K every day.',
+      image: 'https://placekitten.com/300/201', // Replace with actual challenge image URL
+    },
+    // Add more challenges as needed
+  ]);
+
   const renderChallengeCard = ({ item }) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => navigation.navigate('ChallengeDetails', { challenge: item })}
+      onPress={() => {
+        navigation.navigate('HealthChallengeDetailScreen', { challenge: item });
+      }}
     >
       <Image source={{ uri: item.image }} style={styles.cardImage} />
       <View style={styles.cardTextContainer}>
@@ -34,7 +36,7 @@ const ChallengesScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={challenges}
+        data={data}
         keyExtractor={(item) => item.id}
         renderItem={renderChallengeCard}
       />
