@@ -142,7 +142,6 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     backgroundColor:'#F1EFEF',
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
