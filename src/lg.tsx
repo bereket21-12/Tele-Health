@@ -4,33 +4,36 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { doc, setDoc } from "firebase/firestore"; 
 import { db, firebase_auth } from './firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { useAuth } from './AuthProvider'; // Import the useAuth hook
+
 
 const LoginPage = ({navigation}) => {
+  const { login } = useAuth();
     const [email , setemail] = useState("")
     const [password , setpassword] = useState("")
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleLogin = async () => {
-    // console.log('Login pressed');
-    // await setDoc(doc(db, "cities", "LA"), {
-    //   name: "Los Angeles",
-    //   state: "CA",
-    //   country: "USA"
-    // });
+ 
     try {
-      const userCredential = await signInWithEmailAndPassword(firebase_auth, email, password);
-      const user = userCredential.user;
-      console.log("User logged in:", user);
-      navigation.navigate('HealthTipsScreen');
+      // const userCredential = await signInWithEmailAndPassword(firebase_auth, email, password);
+      // const user = userCredential.user;
+        await login(email, password)
+        if(await login(email, password))
+             navigation.navigate('HealthTipsScreen');
+      
       // User is logged in successfully
     } catch (error) {
       console.error("Login error:", error.message);
       // Handle login error, e.g., display an error message to the user
     }
+
+
   };
 
   const handleSignUp = () => {
     console.log('Sign Up pressed');
+    navigation.navigate('UserRegistrationScreen');
   };
 
   const handleForgotPassword = () => {

@@ -1,26 +1,81 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { collection, query, getDocs, doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { db } from './firebaseConfig';
+import 'firebase/firestore'
+import { useAuth } from './AuthProvider';
+
+
 
 const HealthChallengeDetailScreen = ({ route, navigation }) => {
   const { challenge } = route.params;
+  const {user} = useAuth()
+  const [member,setMember] = useState(null)
+
+  useEffect(()=>{
+
+    async function loder() {
+
+      const contactsCollection = collection(db, "user");
+      const contactsQuery =  query(contactsCollection , where('challenges','array-contains',challenge.id));
+      const contactsSnapshot = await getDocs(contactsQuery);
+      const contactsData  = contactsSnapshot.docs.map((doc) => ({
+
+       id: doc.id,
+       ...doc.data(),
+     }));
+     setMember( ()=> contactsData);
+      
+    }
+
+    loder()
+
+   
+
+
+  },[])
+
+  const paricipant = ()=>{
+
+    navigation.navigate('HealthAppParticipants', { pariciant: member });
+    console.log(member)
+    console.log(challenge.id)
+
+
+  }
+ 
+  const  Handeljoin  = () => { 
+    console.log(user[0].id)
+    
+    const challengesCollection = doc(db, "challenges",challenge.id)
+    updateDoc(challengesCollection ,{
+     participants:arrayUnion(user[0].id)
+    })
+    const usercollection = doc(db, "user",user[0].id)
+    updateDoc(usercollection ,{
+      challenges:arrayUnion(challenge.id)
+     })
+    navigation.navigate('JoinChallenge', { challengeId: challenge.id });
+    
+   }
+
+
+  // const collectionRef = firebasestore().collection()
 
   return (
     <ScrollView style={styles.container}>
       <Image source={{ uri: challenge.image }} style={styles.challengeImage} />
       <View style={styles.detailsContainer}>
         <Text style={styles.challengeTitle}>{challenge.title}</Text>
-        <Text style={styles.challengeDescription}>{challenge.description}</Text>
-        <Text style={styles.challengeDuration}>Duration: {challenge.duration}</Text>
-        <Text style={styles.challengeStartDate}>Start Date: {challenge.startDate}</Text>
+        <Text style={styles.challengeDescription}>{challenge.Description}</Text>
+        <Text style={styles.challengeStartDate}>Start Date: {challenge.Start_Date}</Text>
+        <Text style={styles.challengeDuration}>End Date: {challenge.End_Date}</Text>
         {/* Additional Challenge Details */}
-        <Text style={styles.challengeDetails}>Additional Details: {challenge.details}</Text>
+        <Text style={styles.challengeDetails}>Goals : {challenge.Goals}</Text>
       </View>
       <TouchableOpacity
         style={styles.joinButton}
-        onPress={() => {
-          // Implement navigation to join the challenge or perform other actions
-          navigation.navigate('JoinChallenge', { challengeId: challenge.id });
-        }}
+        onPress={() => { Handeljoin()  }}
       >
         <Text style={styles.joinButtonText}>Join Challenge</Text>
       </TouchableOpacity>
@@ -38,7 +93,9 @@ const HealthChallengeDetailScreen = ({ route, navigation }) => {
         <TouchableOpacity
           style={styles.viewParticipantsButton}
           onPress={() => {
-            // Implement functionality to view participants
+            paricipant()
+
+            // Implement functionality to view participants 
             // You can navigate to a screen displaying the list of participants
           }}
         >
@@ -65,6 +122,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 8,
+    color:"blue",
+    fontStyle:'italic'
   },
   challengeDescription: {
     fontSize: 16,
@@ -73,10 +132,12 @@ const styles = StyleSheet.create({
   challengeDuration: {
     fontSize: 14,
     marginBottom: 8,
+    color:"red"
   },
   challengeStartDate: {
     fontSize: 14,
     marginBottom: 16,
+    color:'green'
   },
   challengeDetails: {
     fontSize: 14,
@@ -124,3 +185,15 @@ const styles = StyleSheet.create({
 });
 
 export default HealthChallengeDetailScreen;
+function firebasestore() {
+  throw new Error('Function not implemented.');
+}
+
+function Handeljoin() {
+  throw new Error('Function not implemented.');
+}
+
+function where(arg0: string, arg1: string, arg2: string): import("@firebase/firestore").QueryCompositeFilterConstraint {
+  throw new Error('Function not implemented.');
+}
+

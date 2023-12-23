@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import { collection, query, getDocs } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { db } from './firebaseConfig';
 
 const ChallengesScreen = ({ navigation }) => {
   const [data, setHealthRecords] = useState([
@@ -17,6 +19,32 @@ const ChallengesScreen = ({ navigation }) => {
     },
     // Add more challenges as needed
   ]);
+  const [challenge ,setchallenge] = useState(null)
+
+
+
+
+  useEffect(()=>{
+
+    async function loder() {
+
+      const contactsCollection = collection(db, "challenges");
+      const contactsQuery =  query(contactsCollection);
+      const contactsSnapshot = await getDocs(contactsQuery);
+      const contactsData  =  contactsSnapshot.docs.map((doc) => ({
+       id: doc.id,
+       ...doc.data(),
+     }));
+     setchallenge( ()=> contactsData);
+      
+    }
+
+    loder()
+
+   
+
+
+  },[])
 
   const renderChallengeCard = ({ item }) => (
     <TouchableOpacity
@@ -28,7 +56,7 @@ const ChallengesScreen = ({ navigation }) => {
       <Image source={{ uri: item.image }} style={styles.cardImage} />
       <View style={styles.cardTextContainer}>
         <Text style={styles.cardTitle}>{item.title}</Text>
-        <Text style={styles.cardDescription}>{item.description}</Text>
+        <Text style={styles.cardDescription}>{item.Description}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -36,7 +64,7 @@ const ChallengesScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={data}
+        data={challenge}
         keyExtractor={(item) => item.id}
         renderItem={renderChallengeCard}
       />

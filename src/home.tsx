@@ -1,59 +1,59 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, ScrollView} from 'react-native';
 import { Card } from 'react-native-elements'; // Assuming you are using a UI library like react-native-elements
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import MaterialCommunityIcons from 'react-native-vector-icons';
+import { useAuth } from './AuthProvider';
 const HomeScreen = ({ navigation }) => {
+
+
+  useEffect(() => {
+    // Dynamically set the title
+    navigation.setOptions({
+      title: 'Home',
+    });
+  }, [navigation]);
+
+  const {user} = useAuth();
   // Dummy data for cards
   const cardsData = [
-    { title: 'Appointments', route: 'Appointments' },
-    { title: 'Wellness Challenges', route: 'WellnessChallenges' },
-    { title: 'Health Tips', route: 'HealthTips' },
-    { title: 'Appointments', route: 'Appointments' },
-    { title: 'Wellness Challenges', route: 'WellnessChallenges' },
-    { title: 'Health Tips', route: 'HealthTips' },
-    { title: 'Appointments', route: 'Appointments' },
-    { title: 'Wellness Challenges', route: 'WellnessChallenges' },
-    { title: 'Health Tips', route: 'HealthTips' },
-    { title: 'Appointments', route: 'Appointments' },
-    { title: 'Wellness Challenges', route: 'WellnessChallenges' },
-    { title: 'Health Tips', route: 'HealthTips' },
-  ];
+  
+    { title: 'Health Record', route: 'HealthRecordScreen' },
+    { title: 'Notification', route: 'NotificationScreen' },
+    { title: 'Health Resources', route: 'HealthTipsScreen' },
+  ]
 
   return (
 
-              <ScrollView
-           
-      
-          >
+              <ScrollView >
  
-    <View style={styles.container}>
-      {/* Background image with border radius */}
-      <ImageBackground
+     <View style={styles.container}>
+       <ImageBackground
         source={{ uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.KFB0WSDqeuQwmA_h6gs78gHaDP%26pid%3DApi&f=1&ipt=df89d331c60cf0feb9d3837de657f12f0159e38d35fdb3e9270cb1620d290ab9&ipo=images' }} // Replace with your actual image URL
         style={styles.backgroundImage}
     >
         <View style={styles.overlay}>
                   <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+            <TouchableOpacity onPress={() => navigation.navigate('UserProfileScreen')}>
 
             <Image
-              source={{ uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.mkeL8Hod34Zi264DK6zssQHaEK%26pid%3DApi&f=1&ipt=3f86505c3c01338836964a8f2f192aede9b81f2fd1676f09ffe2bb7ab21d49b1&ipo=images' }} // Replace with your actual image URL
+              source={{ uri: user[0].image }} // Replace with your actual image URL
               style={styles.profilePicture}
             />
        </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-            <Ionicons name="settings" color={'white'} size={30} />
+            <TouchableOpacity >
+            <Ionicons name="settings" color={'white'} size={30} onPress={() => navigation.navigate('UserProfileScreen')} />
             </TouchableOpacity>
           </View>
 
            
         <View style = {styles.welcome}>
-          <Text style={styles.welcomeText}>Hi Bereket!</Text>
+          <Text style={styles.welcomeText}>Hi {user ?  `${user[0].email}` : `Bereket`}</Text>
           <Text style={styles.welcomeText}>Welcome to Your Health App</Text>
           <Text style={styles.welcomeText}>Welcome to Your Health App</Text>
        </View>
           <ScrollView
+          
            horizontal
       showsHorizontalScrollIndicator={false} 
           style={styles.cardsContainer}>
@@ -65,9 +65,9 @@ const HomeScreen = ({ navigation }) => {
               >
             <Image
               source={{ uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.mkeL8Hod34Zi264DK6zssQHaEK%26pid%3DApi&f=1&ipt=3f86505c3c01338836964a8f2f192aede9b81f2fd1676f09ffe2bb7ab21d49b1&ipo=images' }} // Replace with your actual image URL
-              style={styles.card}
+              style={styles.cardPicture}
             />
-            <Text>Addtional Infromatin about the app</Text>
+            <Text style = {styles.title}>{card.title}</Text>
               </TouchableOpacity>
             ))}
           </ScrollView>
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.2)', // Semi-transparent overlay
     padding: 1,
+    width:'100%'
   },
   welcomeText: {
     fontSize: 24,
@@ -129,23 +130,32 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     gap:15,
     marginBottom: 16,
+    marginRight:16
   },
   profilePicture: {
     width: 40,
     height: 40,
     borderRadius: 25,
-    
+
   },
-  settingsIcon: {
-    width: 40,
-    height: 40,
+    cardPicture: {
+    flex: 1,
+    marginHorizontal: 8,
+    paddingTop:100,
+    paddingHorizontal:0,
+    height : "90%",
+    width: "100%",
+     borderRadius: 9,
+
   },
   cardsContainer: {
     flexDirection: 'row',
+    width:'100%',
+   
     backgroundColor:'#F1EFEF',
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
-    width:400  ,
+  
     flex:3,
     
   },
@@ -153,7 +163,11 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 8,
     paddingTop:100,
-    paddingHorizontal:0
+    paddingHorizontal:0,
+    height : "90%",
+    width: 150,
+     borderRadius: 9,
+    
   },
     bottom:{
     paddingTop:'15%',
@@ -172,6 +186,12 @@ const styles = StyleSheet.create({
   welcome:{
     padding : 10,
     alignItems:"center"
+  },
+  title:{
+     marginHorizontal: 8,
+    paddingHorizontal:0,
+    fontSize : 18,
+    
   }
 });
 

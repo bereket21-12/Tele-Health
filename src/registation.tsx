@@ -1,8 +1,12 @@
-import { setDoc, doc } from 'firebase/firestore';
+import { setDoc, doc, addDoc, collection } from 'firebase/firestore';
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView ,Image} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import { db } from './firebaseConfig';
+import { db, firebase_auth } from './firebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import * as ImagePicker from 'expo-image-picker';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 
 const UserRegistrationScreen = ({navigation}) => {
   const [name, setName] = useState('');
@@ -12,25 +16,92 @@ const UserRegistrationScreen = ({navigation}) => {
   const [gender, setGender] = useState('male'); // Default to male
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
+  const [selectedImage, setSelectedImage] = useState(null);
+
 
   const handleRegistration = async () => {
+
+
+    try {
+
+
+      const storage = getStorage();
+      const fileref = `images/${Date.now()}.jpg`
+      const storageRef = ref(storage, fileref);
+      
+      // Convert the image to a base64 string
+    
+
+      // Upload the base64 string to Firebase Storage
+          const response = await fetch(selectedImage);
+           const blob = await response.blob();
+
+       // Upload the Blob to Firebase Storage
+       await uploadBytes(storageRef, blob);
+
+      // Get the download URL of the uploaded image
+    const dowmloadurl = await getDownloadURL(storageRef)
+     
+    await  await addDoc(collection(db, "user"), {
+      name,
+      email,
+      age,
+      gender,
+      height,
+      weight,
+      challenges : [],
+      image :dowmloadurl
+     });
+       
+      // Now you can use the downloadURL as needed (e.g., store it in Firebase Firestore)
+      console.log('Download URL:', dowmloadurl);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
     // Add logic to handle user registration
     console.log('User registered:', { name, email, password, age, gender, height, weight });
     // You can add further actions like API calls or navigation after registration
-    await setDoc(doc(db, "user", email), {
-      name: name,
-      state: email,
-      age: age,
-      gender: gender,
-      height: height,
-      weight: weight
-    });
+    // await  await addDoc(collection(db, "user"), {
+    //   name,
+    //   email,
+    //   age,
+    //   gender,
+    //   height,
+    //   weight,
+    //   challenges : []
+    //  });
+    await  createUserWithEmailAndPassword(firebase_auth ,email,password)
     navigation.navigate('LoginPage');
   };
-
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    console.log(result);
+  
+    if (!result.canceled) {
+      // await uploadImageToFirestore();
+      setSelectedImage(result.uri);
+    }
+  };
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>User Registration</Text>
+      <View >
+      <TouchableOpacity onPress={pickImage}>
+        <Text style={styles.imagespicertext}>Pick an image</Text>
+      </TouchableOpacity>
+      {selectedImage && (
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: selectedImage }} style={styles.image} />
+        </View>
+      )}
+    </View>
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>Name:</Text>
         <TextInput
@@ -168,6 +239,19 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  imageContainer: {
+    marginTop: 20,
+    alignSelf:"center"
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+  },
+  imagespicertext: {
+    fontSize: 18,
+    color: 'blue',
   },
 });
 

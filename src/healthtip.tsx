@@ -1,19 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, getFocusedRouteNameFromRoute, useNavigation, useRoute } from '@react-navigation/native';
 import AppointmentScreen from './appointment';
 import Login from './login';
 import NotificationScreen from './notification';
 import UserProfileScreen from './profile';
 import ChallengesScreen from './challenges';
 import HomeScreen from './home';
-import LoginPage from './lg';
+import EmergencyContactsScreen from './emergencycontact';
 
 const Tab = createBottomTabNavigator();
         
-const HealthTipsScreen = () => {
+const HealthTipsScreen = ({ route }) => {
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+    navigation.setOptions({ title: routeName });
+  }, [navigation, route]);
 
 
   const tipsData = [
@@ -62,42 +69,42 @@ const HealthTipsScreen = () => {
                 // Add more tip data as needed
               ];
         
-          const TipList = () => (
-            <ScrollView style={styles.content}>
-              {tipsData.map((tip) => (
-                <TouchableOpacity key={tip.id} style={styles.tipContainer}>
-                  <Image source={{uri : tip.imageUrl}} style={styles.tipImage} />
-                  <View style={styles.tipContent}>
-                    <Text style={styles.tipTitle}>{tip.title}</Text>
-                    <Text style={styles.tipDescription}>{tip.description}</Text>
-                  </View>
-                  <Ionicons name="ios-arrow-forward" size={24} color="#3498db" style={styles.arrowIcon} />
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          );
+          // const TipList = () => (
+          //   <ScrollView style={styles.content}>
+          //     {tipsData.map((tip) => (
+          //       <TouchableOpacity key={tip.id} style={styles.tipContainer}>
+          //         <Image source={{uri : tip.imageUrl}} style={styles.tipImage} />
+          //         <View style={styles.tipContent}>
+          //           <Text style={styles.tipTitle}>{tip.title}</Text>
+          //           <Text style={styles.tipDescription}>{tip.description}</Text>
+          //         </View>
+          //         <Ionicons name="ios-arrow-forward" size={24} color="#3498db" style={styles.arrowIcon} />
+          //       </TouchableOpacity>
+          //     ))}
+          //   </ScrollView>
+          // );
         
           return (
             <View style={styles.container}>
            
-                <Tab.Navigator
+                <Tab.Navigator screenOptions={{headerShown : false}}
       
                 >
-                  <Tab.Screen
-                    name="Home"
-                    component={TipList}
-                    options={{
-                      tabBarLabel: 'Home',
-                      tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="ios-home" color={color} size={size}
-                         />
-                      ),
-                    }}
-                  />
- 
+                          <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            tabBarLabel: 'Home',
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="ios-home" color={color} size={size} />
+            ),
+          }}
+        />
+
+    
                 <Tab.Screen
-                    name="login"
-                    component={LoginPage}
+                    name="ChallengesScreen"
+                    component={ChallengesScreen}
                     options={{
                     tabBarLabel: 'ChallengesScreen',
                     tabBarIcon: ({ color, size }) => (
@@ -105,34 +112,24 @@ const HealthTipsScreen = () => {
                     ),
                     }}
       />
-
-
-                 <Tab.Screen
-                    name="More"
-                    component={UserProfileScreen}
+    
+                <Tab.Screen
+                    name="Appointment"
+                    component={AppointmentScreen}
                     options={{
-                    tabBarLabel: 'More',
+                    tabBarLabel: 'Appointment',
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="ios-menu" color={color} size={size} />
+                        <Ionicons name="ios-notifications" color={color} size={size} />
                     ),
                     }}
       />
-        <Tab.Screen
-                    name="HomeScreen"
-                    component={HomeScreen}
+
+
+       <Tab.Screen
+                    name="EmergencyContactsScreen"
+                    component={EmergencyContactsScreen}
                     options={{
                    
-                    tabBarLabel: 'HomeScreen',
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="ios-menu" color={color} size={size} />
-                    ),
-                    }}
-      />
-       <Tab.Screen
-                    name="nnn"
-                    component={NotificationScreen}
-                    options={{
-                    tabBarLabel: 'Notification',
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="ios-menu" color={color} size={size} />
                     ),
