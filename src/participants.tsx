@@ -1,32 +1,63 @@
+import { collection, query, getDocs } from 'firebase/firestore';
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
+import { db } from './firebaseConfig';
+import { useAuth } from './AuthProvider';
 
 const HealthAppParticipants = ({ route, navigation }) => {
 
-  const { originalData } = route.params
+  const { challenge } = route.params
+  const {user} = useAuth()
 
 
-  const[member ,setmember] = useState(originalData)
-  const [participants, setParticipants] = useState([]);
+  const [member,setMember] = useState(null)
+
+  useEffect(() => {
+    const loader = async () => {
+      try {
+        const contactsCollection = collection(db, "user");
+        const contactsQuery = query(contactsCollection);
+        const contactsSnapshot = await getDocs(contactsQuery);
   
-  // useEffect(() => {
-  //   // Fetch or load the participants data here
-  //   // For demonstration purposes, using dummy data
-  //   const dummyData = [
-  //     { id: '1', name: 'John Doe', phone: '123-456-7890', imageUrl: 'https://example.com/john.jpg' },
-  //     { id: '2', name: 'Jane Doe', phone: '987-654-3210', imageUrl: 'https://example.com/jane.jpg' },
-  //     // Add more participants as needed
-  //   ];
-
-  //   setParticipants(dummyData);
-  // }, []);
+        if (contactsSnapshot.empty) {
+          console.log('No documents found in the "user" collection.');
+          return;
+        }
+  
+        const contactsData = contactsSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+  
+        console.log('Contacts Data:', contactsData);
+  
+        const filteredContacts =  contactsData.filter((contact) =>
+          contact.challenges.includes(challenge.id)
+        );
+  
+        console.log('\nFiltered Contacts:', filteredContacts);
+  
+        if (filteredContacts.length > 0) {
+          
+           setMember(filteredContacts);
+        } else {
+          console.log('No matching documents found for challenge ID:', challenge.id);
+        }
+      } catch (error) {
+        console.error('Error loading contacts:', error);
+      }
+    };
+  
+    loader();
+  }, [challenge.id, db,user[0].challenges]);
+ 
 
   const renderItem = ({ item }) => (
     <View style={styles.participantItem}>
       <Image source={{ uri: item.image }} style={styles.participantImage} />
       <View style={styles.participantInfo}>
         <Text style={styles.participantName}>{item.name}</Text>
-        <Text style={styles.participantPhone}>{`Phone: ${item.email}`}</Text>
+        <Text style={styles.participantPhone}>{`Email: ${item.email}`}</Text>
       </View>
     </View>
   );

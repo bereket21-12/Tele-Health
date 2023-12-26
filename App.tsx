@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import HealthTipsScreen from './src/healthtip';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Login from './src/login';
 import UserProfileScreen from './src/profile';
 import ChallengesScreen from './src/challenges';
@@ -20,9 +20,15 @@ import DetailedAppointmentScreen from './src/detailAppointment';
 import { AuthProvider } from './src/AuthProvider';
 import DetailedContactScreen from './src/detailedcontact';
 import HealthAppParticipants from './src/participants';
+import TipList from './src/resources';
+import detailResource from './src/detailResource';
+import CreateRecord from './src/createRec';
+
 export default function App() {
 
   const Stack = createStackNavigator(); //screenOptions={{headerShown : false}}
+
+
   return (
     <AuthProvider >
     <NavigationContainer>
@@ -42,7 +48,9 @@ export default function App() {
         <Stack.Screen name="NotificationScreen" component={NotificationScreen}/>
         <Stack.Screen name="DetailedContactScreen" component={DetailedContactScreen}/>
         <Stack.Screen name="HealthAppParticipants" component={HealthAppParticipants}/>
-
+        <Stack.Screen name='TipList' component={TipList}/>
+        <Stack.Screen name='detailResource' component={detailResource}/>
+        <Stack.Screen name='CreateRect' component={CreateRecord}/>
       </Stack.Navigator>
     </NavigationContainer>
     </AuthProvider>

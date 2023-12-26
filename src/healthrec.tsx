@@ -1,53 +1,66 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { useNavigation } from '@react-navigation/native';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from './firebaseConfig';
+import { useAuth } from './AuthProvider';
 
 const HealthRecordScreen = ({ navigation }) => {
+  const [data, setData] = useState(null);
+  const { user } = useAuth();
+  const [timestamp, setTimestamp] = useState(null);
 
+  const contactsCollection = collection(db, "health_rec");
+  const contactsQuery = query(contactsCollection, where('userid', '==', `${user[0].id}`));
 
-  const healthRecords = [
-    {
-      id: '1',
-      date: '2023-01-01',
-      weight: '68 kg',
-      bloodPressure: '120/80 mmHg',
-      steps: '8,000',
-    },
-    {
-      id: '2',
-      date: '2023-01-05',
-      weight: '70 kg',
-      bloodPressure: '122/82 mmHg',
-      steps: '10,000',
-    },
-    {
-      id: '3',
-      date: '2023-01-10',
-      weight: '67 kg',
-      bloodPressure: '118/78 mmHg',
-      steps: '7,000',
-    },
-    // Add more health records as needed
-  ];
-  const [data , sethealthRecords] = useState(healthRecords)
+  useEffect(() => {
+    async function dataloader() {
+      try {
+        const contactsSnapshot = await getDocs(contactsQuery);
+        const contactsData = contactsSnapshot.docs.map((doc) => {
+          const selectedDate = doc.data().selectedDate?.toDate();
+          
+          if (selectedDate instanceof Date) {
+            return {
+              id: doc.id,
+              selectedDate,
+              weight: doc.data().weight,
+              pressure: doc.data().pressure,
+              step: doc.data().step,
+              heartRate: doc.data().heartRate,
+              // Add other fields as needed
+            };
+          } else {
+            console.warn(`Invalid selectedDate for document with ID: ${doc.id}`);
+            return null; // Skip this item in the mapping
+          }
+        });
 
-// const navigation2 = useNavigation();
+        // Remove null entries from the array
+        const filteredContactsData = contactsData.filter(item => item !== null);
 
-    const handeledit = (recordId) => {
-      navigation.navigate('EditHealthRecordScreen', { originalData: data.find(record => record.id === recordId) });
-    };
-    
-    const handelcreate = () => {
-      console.log("create clicked")
-      navigation.navigate('CreateHealthRecordScreen');
-      
-    };
+        setData(filteredContactsData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
 
-   const renderHealthRecordCard = ({ item }) => (
+    dataloader();
+  }, [data]); // Only run on mount
+
+  const handeledit = (recordId) => {
+    navigation.navigate('EditHealthRecordScreen', { originalData: data.find(record => record.id === recordId) });
+  };
+
+  const handelcreate = () => {
+    console.log("create clicked")
+    navigation.navigate('CreateRect');
+  };
+
+  const renderHealthRecordCard = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => handeledit(item.id)}>
       <View style={styles.cardHeader}>
-        <Text style={styles.cardDate}>{item.date}</Text>
+        <Text style={styles.cardDate}>{item.selectedDate ?.toLocaleString()}</Text>
         <Icon name="edit" size={20} color="#fff" />
       </View>
       <View style={styles.recordContainer}>
@@ -57,11 +70,15 @@ const HealthRecordScreen = ({ navigation }) => {
         </View>
         <View style={styles.recordItem}>
           <Text style={styles.recordLabel}>Blood Pressure:</Text>
-          <Text style={styles.recordValue}>{item.bloodPressure}</Text>
+          <Text style={styles.recordValue}>{item.pressure}</Text>
         </View>
         <View style={styles.recordItem}>
           <Text style={styles.recordLabel}>Steps:</Text>
-          <Text style={styles.recordValue}>{item.steps}</Text>
+          <Text style={styles.recordValue}>{item.step}</Text>
+        </View>
+        <View style={styles.recordItem}>
+          <Text style={styles.recordLabel}>Heart Rate:</Text>
+          <Text style={styles.recordValue}>{item.heartRate}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -69,12 +86,12 @@ const HealthRecordScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {data.map((record) => (
-        <React.Fragment key={record.id}>
-          {renderHealthRecordCard({ item: record })}
-        </React.Fragment>
-      ))}
-      <TouchableOpacity style={styles.addButton} onPress={() => handelcreate}>
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.id}
+        renderItem={renderHealthRecordCard}
+      />
+      <TouchableOpacity style={styles.addButton} onPress={() => handelcreate()}>
         <Icon name="plus" size={30} color="#3498db" />
       </TouchableOpacity>
     </View>
@@ -85,7 +102,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    marginTop:"20%"
+    marginTop: "5%"
   },
   card: {
     backgroundColor: '#3498db',

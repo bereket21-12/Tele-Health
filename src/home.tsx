@@ -20,7 +20,7 @@ const HomeScreen = ({ navigation }) => {
   
     { title: 'Health Record', route: 'HealthRecordScreen' },
     { title: 'Notification', route: 'NotificationScreen' },
-    { title: 'Health Resources', route: 'HealthTipsScreen' },
+    { title: 'Health Resources', route: 'TipList' },
   ]
 
   return (

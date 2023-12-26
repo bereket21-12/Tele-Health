@@ -10,42 +10,16 @@ import { useAuth } from './AuthProvider';
 const HealthChallengeDetailScreen = ({ route, navigation }) => {
   const { challenge } = route.params;
   const {user} = useAuth()
-  const [member,setMember] = useState(null)
 
-  useEffect(()=>{
-
-    async function loder() {
-
-      const contactsCollection = collection(db, "user");
-      const contactsQuery =  query(contactsCollection , where('challenges','array-contains',challenge.id));
-      const contactsSnapshot = await getDocs(contactsQuery);
-      const contactsData  = contactsSnapshot.docs.map((doc) => ({
-
-       id: doc.id,
-       ...doc.data(),
-     }));
-     setMember( ()=> contactsData);
-      
-    }
-
-    loder()
-
-   
-
-
-  },[])
 
   const paricipant = ()=>{
 
-    navigation.navigate('HealthAppParticipants', { pariciant: member });
-    console.log(member)
-    console.log(challenge.id)
-
+    navigation.navigate('HealthAppParticipants', { challenge:challenge });
 
   }
  
   const  Handeljoin  = () => { 
-    console.log(user[0].id)
+  
     
     const challengesCollection = doc(db, "challenges",challenge.id)
     updateDoc(challengesCollection ,{
@@ -55,8 +29,9 @@ const HealthChallengeDetailScreen = ({ route, navigation }) => {
     updateDoc(usercollection ,{
       challenges:arrayUnion(challenge.id)
      })
-    navigation.navigate('JoinChallenge', { challengeId: challenge.id });
-    
+    alert(`You have joined ${challenge.title} successfully`)
+
+
    }
 
 
@@ -92,12 +67,7 @@ const HealthChallengeDetailScreen = ({ route, navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.viewParticipantsButton}
-          onPress={() => {
-            paricipant()
-
-            // Implement functionality to view participants 
-            // You can navigate to a screen displaying the list of participants
-          }}
+          onPress={() => { paricipant() }}
         >
           <Text style={styles.viewParticipantsButtonText}>View Participants</Text>
         </TouchableOpacity>

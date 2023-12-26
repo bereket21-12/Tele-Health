@@ -42,7 +42,7 @@ const UserRegistrationScreen = ({navigation}) => {
       // Get the download URL of the uploaded image
     const dowmloadurl = await getDownloadURL(storageRef)
      
-    await  await addDoc(collection(db, "user"), {
+      await addDoc(collection(db, "user"), {
       name,
       email,
       age,
@@ -58,18 +58,8 @@ const UserRegistrationScreen = ({navigation}) => {
     } catch (error) {
       console.error('Error uploading image:', error);
     }
-    // Add logic to handle user registration
     console.log('User registered:', { name, email, password, age, gender, height, weight });
-    // You can add further actions like API calls or navigation after registration
-    // await  await addDoc(collection(db, "user"), {
-    //   name,
-    //   email,
-    //   age,
-    //   gender,
-    //   height,
-    //   weight,
-    //   challenges : []
-    //  });
+
     await  createUserWithEmailAndPassword(firebase_auth ,email,password)
     navigation.navigate('LoginPage');
   };

@@ -16,9 +16,7 @@ const LoginPage = ({navigation}) => {
   const handleLogin = async () => {
  
     try {
-      // const userCredential = await signInWithEmailAndPassword(firebase_auth, email, password);
-      // const user = userCredential.user;
-        await login(email, password)
+     
         if(await login(email, password))
              navigation.navigate('HealthTipsScreen');
       

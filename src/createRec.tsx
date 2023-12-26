@@ -1,25 +1,24 @@
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { addDoc, collection } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
-import { useAuth } from './AuthProvider';
+import { db, firebase_auth } from './firebaseConfig';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { deleteDoc, doc, setDoc } from 'firebase/firestore';
-import { db } from './firebaseConfig';
-
-const EditHealthRecordScreen = ({ route, navigation }) => {
-  const { originalData } = route.params
-  const {user} = useAuth()
-  const userDocRef = doc(db, 'health_rec', originalData.id); // Pass the original data from the health originalData screen
+import { useAuth } from './AuthProvider';
 
 
-  const [selectedDate, setSelectedDate] = useState(originalData.selectedDate);
-  const [pressure, setPressure] = useState(originalData.pressure);
-  const [heartRate, setHearRate] = useState(originalData.heartRate);
-  const [step, setStep] = useState(originalData.step);
-  const [weight, setWeight] = useState(originalData.weight);
+const CreateRecord = ( {navigation} ) => {
+   
+   const {user} = useAuth()
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [pressure, setPressure] = useState('');
+  const [heartRate, setHearRate] = useState('');
+  const [step, setStep] = useState('');
+  const [weight, setWeight] = useState('');
   const[userid,setUserId] = useState(user[0].id)
   const [showDatePicker, setShowDatePicker] = useState(false);
-
-
 
   const handleDateChange = (event, date) => {
 
@@ -29,33 +28,33 @@ const EditHealthRecordScreen = ({ route, navigation }) => {
     }
     
   };
-  const handleDelete = () => {
-    
-    deleteDoc(userDocRef)
-    .then(() => {
-      console.log('Document successfully deleted');
-    })
-    .catch((error) => {
-      console.error('Error deleting document:', error);
-    });
-    navigation.goBack();
-  };
 
-  const handleUpdate = () => {
-    
-        setDoc(userDocRef, {selectedDate :selectedDate, pressure :pressure,heartRate :heartRate,step :step,weight :weight,userid :userid,}, { merge: true })
-      .then(() => {
-        console.log('Update successful');
-      })
-      .catch((error) => {
-        console.error('Error updating data:', error);
-      });
-    navigation.goBack();
+  const handleRegistration = async () => {
 
+
+    try {
+     
+      await addDoc(collection(db, "health_rec"), {
+      selectedDate,
+      pressure,
+      heartRate,
+      step,
+      weight,
+      userid
+     });
+
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+
+
+   
+    navigation.navigate('HealthRecordScreen');
   };
 
   return (
-<KeyboardAvoidingView
+
+    <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
@@ -83,7 +82,6 @@ const EditHealthRecordScreen = ({ route, navigation }) => {
           style={styles.input}
           placeholder="Enter weight"
           keyboardType="numeric"
-          value={weight}
           onChangeText={(text) => setWeight(text)}
         />
 
@@ -91,7 +89,6 @@ const EditHealthRecordScreen = ({ route, navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter blood pressure"
-          value={pressure}
           onChangeText={(text) => setPressure(text )}
         />
 
@@ -100,7 +97,6 @@ const EditHealthRecordScreen = ({ route, navigation }) => {
           style={styles.input}
           placeholder="Enter steps"
           keyboardType="numeric"
-          value={step}
           onChangeText={(text) => setStep( text)}
         />
         <Text style={styles.label}>Heart Rate:</Text>
@@ -108,16 +104,12 @@ const EditHealthRecordScreen = ({ route, navigation }) => {
           style={styles.input}
           placeholder="Enter Heart Rate"
           keyboardType="numeric"
-          value={heartRate}
           onChangeText={(text) => setHearRate( text)}
         />
 
-        <TouchableOpacity style={styles.saveButton} onPress={handleUpdate}>
-          <Text style={styles.saveButtonText}>update</Text>
+        <TouchableOpacity style={styles.saveButton} onPress={handleRegistration}>
+          <Text style={styles.saveButtonText}>Add</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.deletebutton} onPress={handleDelete} >
-            <Text style={styles.loginButtonText}>Delete</Text>
-          </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
@@ -161,7 +153,8 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 18,
     fontWeight: 'bold',
-  },  datePickerButton: {
+  },
+  datePickerButton: {
     backgroundColor: '#3498db',
     padding: 15,
     borderRadius: 5,
@@ -175,19 +168,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
   },
-  deletebutton: {
-  backgroundColor: '#e31212',
-  paddingVertical: 12,
-  borderRadius: 5,
-  alignItems: 'center',
-  width: '100%', // Make button full width
-  marginTop:16
-  },
-  loginButtonText: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
 });
 
-export default EditHealthRecordScreen;
+export default CreateRecord;
