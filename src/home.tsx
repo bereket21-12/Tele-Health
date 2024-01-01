@@ -5,8 +5,6 @@ import { AntDesign, Ionicons } from '@expo/vector-icons';
 import MaterialCommunityIcons from 'react-native-vector-icons';
 import { useAuth } from './AuthProvider';
 const HomeScreen = ({ navigation }) => {
-
-
   useEffect(() => {
     // Dynamically set the title
     navigation.setOptions({
@@ -14,89 +12,65 @@ const HomeScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
-  const {user} = useAuth();
+  const { user } = useAuth();
+
   // Dummy data for cards
   const cardsData = [
-  
-    { title: 'Health Record', route: 'HealthRecordScreen' },
-    { title: 'Notification', route: 'NotificationScreen' },
-    { title: 'Health Resources', route: 'TipList' },
-  ]
+    { title: 'Health Record', route: 'HealthRecordScreen', src: require('../assets/health_rec.png') },
+    { title: 'Challenges', route: 'ChallengesScreen', src: require('../assets/challenges.jpg') },
+    { title: 'Health Resources', route: 'TipList', src: require('../assets/healthtips.jpg') },
+    { title: 'My Appointment', route: 'MyAppointmentScreen', src: require('../assets/appointment.jpg') },
+  ];
 
   return (
-
-              <ScrollView >
- 
-     <View style={styles.container}>
-       <ImageBackground
-        source={{ uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.KFB0WSDqeuQwmA_h6gs78gHaDP%26pid%3DApi&f=1&ipt=df89d331c60cf0feb9d3837de657f12f0159e38d35fdb3e9270cb1620d290ab9&ipo=images' }} // Replace with your actual image URL
-        style={styles.backgroundImage}
+    <ScrollView>
+      <View style={styles.container}>
+      <ImageBackground
+      source={require('../assets/heart.jpg')}
+      style={styles.backgroundImage}
     >
-        <View style={styles.overlay}>
-                  <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.navigate('UserProfileScreen')}>
-
-            <Image
-              source={{ uri: user[0].image }} // Replace with your actual image URL
-              style={styles.profilePicture}
-            />
-       </TouchableOpacity>
-            <TouchableOpacity >
-            <Ionicons name="settings" color={'white'} size={30} onPress={() => navigation.navigate('UserProfileScreen')} />
-            </TouchableOpacity>
-          </View>
-
-           
-        <View style = {styles.welcome}>
-          <Text style={styles.welcomeText}>Hi {user ?  `${user[0].email}` : `Bereket`}</Text>
-          <Text style={styles.welcomeText}>Welcome to Your Health App</Text>
-          <Text style={styles.welcomeText}>Welcome to Your Health App</Text>
-       </View>
-          <ScrollView
-          
-           horizontal
-      showsHorizontalScrollIndicator={false} 
-          style={styles.cardsContainer}>
-            {cardsData.map((card, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.card}
-                onPress={() => navigation.navigate(card.route)}
-              >
-            <Image
-              source={{ uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.mkeL8Hod34Zi264DK6zssQHaEK%26pid%3DApi&f=1&ipt=3f86505c3c01338836964a8f2f192aede9b81f2fd1676f09ffe2bb7ab21d49b1&ipo=images' }} // Replace with your actual image URL
-              style={styles.cardPicture}
-            />
-            <Text style = {styles.title}>{card.title}</Text>
+          <View style={styles.overlay}>
+            <View style={styles.header}>
+              <TouchableOpacity onPress={() => navigation.navigate('UserProfileScreen')}>
+                <Image source={{ uri: user[0].image }} style={styles.profilePicture} />
               </TouchableOpacity>
-            ))}
-          </ScrollView>
-          <View style = {styles.bottom} >
-           <Text style = {styles.story}>Your Stories</Text>
-           <Text>Challenge Completed</Text>
-            <Image
-              source={{ uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.mkeL8Hod34Zi264DK6zssQHaEK%26pid%3DApi&f=1&ipt=3f86505c3c01338836964a8f2f192aede9b81f2fd1676f09ffe2bb7ab21d49b1&ipo=images' }} // Replace with your actual image URL
-              style={styles.card}
-            />
-           <Text>Addtional Infromatin about the app</Text>
-           <Text>Addtional Infromatin about the app</Text>
-             <Image
-              source={{ uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.KFB0WSDqeuQwmA_h6gs78gHaDP%26pid%3DApi&f=1&ipt=df89d331c60cf0feb9d3837de657f12f0159e38d35fdb3e9270cb1620d290ab9&ipo=images' }} // Replace with your actual image URL
-              style={styles.card}
-            />
-           <Text>Addtional Infromatin about the app</Text>
-           <Text>Addtional Infromatin about the app</Text>
-           <Text>Addtional Infromatin about the app</Text>
-           <Text>Addtional Infromatin about the app</Text>
-           <Text>Addtional Infromatin about the app</Text>
-           <Text>Addtional Infromatin about the app</Text>
-           <Text>Addtional Infromatin about the app</Text>
+              <TouchableOpacity>
+                <Ionicons name="settings" color={'white'} size={30} onPress={() => navigation.navigate('SettingsScreen')} />
+              </TouchableOpacity>
+            </View>
 
+            <View style={styles.welcome}>
+              <Text style={styles.welcomeText1}>Hi {user ? `${user[0].name}` : `Bereket`}</Text>
+              <Text style={styles.welcomeText}>Welcome to Campus Health </Text>
+            </View>
+
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cardsContainer}>
+              {cardsData.map((card, index) => (
+                <TouchableOpacity key={index} style={styles.card} onPress={() => navigation.navigate(card.route)}>
+                  <Image source={card.src} style={styles.cardPicture} />
+                  <Text style={styles.title}>{card.title}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+
+            <View style={styles.bottom}>
+              <Text style={styles.story}>Your Stories</Text>
+              <Text>Challenge Completed</Text>
+              <Image source={{ uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.mkeL8Hod34Zi264DK6zssQHaEK%26pid%3DApi&f=1&ipt=3f86505c3c01338836964a8f2f192aede9b81f2fd1676f09ffe2bb7ab21d49b1&ipo=images' }} style={styles.cardPicture} />
+              <Text>Addtional Information about the app</Text>
+              <Text>Addtional Information about the app</Text>
+              <Image source={{ uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.KFB0WSDqeuQwmA_h6gs78gHaDP%26pid%3DApi&f=1&ipt=df89d331c60cf0feb9d3837de657f12f0159e38d35fdb3e9270cb1620d290ab9&ipo=images' }} style={styles.cardPicture} />
+              <Text>Addtional Information about the app</Text>
+              <Text>Addtional Information about the app</Text>
+              <Text>Addtional Information about the app</Text>
+              <Text>Addtional Information about the app</Text>
+              <Text>Addtional Information about the app</Text>
+              <Text>Addtional Information about the app</Text>
+              <Text>Addtional Information about the app</Text>
+            </View>
           </View>
-
-        </View>
-      </ImageBackground>
-    </View>
+        </ImageBackground>
+      </View>
     </ScrollView>
   );
 };
@@ -119,6 +93,13 @@ const styles = StyleSheet.create({
     width:'100%'
   },
   welcomeText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 16,
+    paddingBottom:23
+  },
+  welcomeText1: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#fff',
@@ -152,7 +133,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width:'100%',
    
-    backgroundColor:'#F1EFEF',
+    backgroundColor:'#dcf1f2',
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
   
@@ -172,7 +153,7 @@ const styles = StyleSheet.create({
     bottom:{
     paddingTop:'15%',
     alignItems:'center',
-    backgroundColor:'#F1EFEF',
+    backgroundColor:'#dcf1f2',
     padding :10
   },
   story : {

@@ -23,11 +23,30 @@ import HealthAppParticipants from './src/participants';
 import TipList from './src/resources';
 import detailResource from './src/detailResource';
 import CreateRecord from './src/createRec';
+import MyAppointmentScreen from './src/myAppointment';
+import SettingsScreen from './src/settings';
+import AboutUsScreen from './src/us';
+import * as Notifications from 'expo-notifications';
 
 export default function App() {
 
   const Stack = createStackNavigator(); //screenOptions={{headerShown : false}}
 
+
+  useEffect(()=>{async function registerForPushNotificationsAsync() {
+    const { status } = await Notifications.requestPermissionsAsync();
+    try {
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status === 'granted') {
+        const token = (await Notifications.getExpoPushTokenAsync()).data;
+        console.log('Expo Push Token:', token);
+      }
+    } catch (error) {
+      console.error('Error fetching Expo token:', error);
+    }}
+    registerForPushNotificationsAsync()
+  },[]);
+  
 
   return (
     <AuthProvider >
@@ -39,7 +58,7 @@ export default function App() {
         <Stack.Screen name="home" component={HomeScreen}/>
         <Stack.Screen name="LoginPage" component={LoginPage} />
         <Stack.Screen name="UserRegistrationScreen" component={UserRegistrationScreen} />
-        <Stack.Screen name="HealthTipsScreen" component={HealthTipsScreen}  options={{ title: 'Health App' }}  />
+        <Stack.Screen name="HealthTipsScreen" component={HealthTipsScreen} />
         <Stack.Screen name="HealthRecordScreen" component={HealthRecordScreen} />
         <Stack.Screen name ="EditHealthRecordScreen" component={EditHealthRecordScreen} />
         <Stack.Screen name="CreateHealthRecordScreen" component={CreateHealthRecordScreen} />
@@ -51,6 +70,11 @@ export default function App() {
         <Stack.Screen name='TipList' component={TipList}/>
         <Stack.Screen name='detailResource' component={detailResource}/>
         <Stack.Screen name='CreateRect' component={CreateRecord}/>
+        <Stack.Screen name='MyAppointmentScreen' component={MyAppointmentScreen}/>
+        <Stack.Screen name='SettingsScreen' component={SettingsScreen}/>
+        <Stack.Screen name='AboutUsScreen' component={AboutUsScreen}/>
+        <Stack.Screen name='ChallengesScreen' component={ChallengesScreen}/>
+
       </Stack.Navigator>
     </NavigationContainer>
     </AuthProvider>

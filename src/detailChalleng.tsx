@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { collection, query, getDocs, doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { collection, query, doc, updateDoc, arrayUnion, DocumentData, DocumentReference, arrayRemove } from 'firebase/firestore';
 import { db } from './firebaseConfig';
 import 'firebase/firestore'
 import { useAuth } from './AuthProvider';
@@ -10,6 +10,7 @@ import { useAuth } from './AuthProvider';
 const HealthChallengeDetailScreen = ({ route, navigation }) => {
   const { challenge } = route.params;
   const {user} = useAuth()
+  const userDocRef = doc(db, 'challenges', challenge.id);
 
 
   const paricipant = ()=>{
@@ -17,6 +18,25 @@ const HealthChallengeDetailScreen = ({ route, navigation }) => {
     navigation.navigate('HealthAppParticipants', { challenge:challenge });
 
   }
+
+  const handleDelete = async () => {
+    try {
+      const challengesCollection = doc(db, 'challenges', challenge.id);
+      await updateDoc(challengesCollection, {
+        participants: arrayRemove(user[0].id),
+      });
+  
+      const userCollection = doc(db, 'user', user[0].id); // Update to your users collection name
+      await updateDoc(userCollection, {
+        challenges: arrayRemove(challenge.id),
+      });
+  
+      alert(`You have left ${challenge.title} successfully`);
+      navigation.goBack();
+    } catch (error) {
+      console.error('Error handling deletion:', error);
+    }
+  };
  
   const  Handeljoin  = () => { 
   
@@ -33,9 +53,6 @@ const HealthChallengeDetailScreen = ({ route, navigation }) => {
 
 
    }
-
-
-  // const collectionRef = firebasestore().collection()
 
   return (
     <ScrollView style={styles.container}>
@@ -59,11 +76,10 @@ const HealthChallengeDetailScreen = ({ route, navigation }) => {
         <TouchableOpacity
           style={styles.shareButton}
           onPress={() => {
-            // Implement functionality to share the challenge
-            // You can use a Share API or a custom implementation
+            handleDelete()
           }}
         >
-          <Text style={styles.shareButtonText}>Share Challenge</Text>
+          <Text style={styles.shareButtonText}>Leave Challenge</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.viewParticipantsButton}
@@ -164,6 +180,10 @@ function Handeljoin() {
 }
 
 function where(arg0: string, arg1: string, arg2: string): import("@firebase/firestore").QueryCompositeFilterConstraint {
+  throw new Error('Function not implemented.');
+}
+
+function deleteDoc(arg0: DocumentReference<DocumentData, DocumentData>) {
   throw new Error('Function not implemented.');
 }
 

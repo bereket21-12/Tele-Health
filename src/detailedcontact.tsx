@@ -18,9 +18,6 @@ const DetailedContactScreen = ({ route, navigation }) => {
 
 
   const handleUpdate = () => {
-    // Implement update logic here
-    // You can use an API call, state management library, or any other method to update the contact details
-    // For simplicity, we're just updating the state in this example
     
         setDoc(userDocRef, { name: name, phonenum: phoneNumber }, { merge: true })
       .then(() => {

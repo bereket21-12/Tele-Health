@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
   }, [firebase_auth]);
 
   const login = async (email, password) => {
+    
     try {
        const userCredential = await signInWithEmailAndPassword(firebase_auth, email, password)
        const loggedInUser = userCredential.user;
@@ -49,8 +50,17 @@ export const AuthProvider = ({ children }) => {
 
   };
 
+  const signOut = async () => {
+    try {
+      await firebase_auth.signOut();
+      // Additional cleanup or state updates can be done here
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login }}>
+    <AuthContext.Provider value={{ user, login ,signOut }}>
       {children}
     </AuthContext.Provider>
   );

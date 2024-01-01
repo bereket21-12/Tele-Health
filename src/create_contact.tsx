@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import firebase from 'firebase/app';
 import 'firebase/storage';
 import { storage,app, db } from './firebaseConfig';
 import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadString, getDownloadURL, uploadBytes, StorageReference } from 'firebase/storage';
 import 'firebase/storage';
 import { useAuth } from './AuthProvider';
-import { useNavigation } from '@react-navigation/native';
 
 const CreateContactScreen
  = ({ navigation }) => {
@@ -32,28 +30,22 @@ const CreateContactScreen
         const storage = getStorage();
         const fileref = `images/${Date.now()}.jpg`
         const storageRef = ref(storage, fileref);
-        
-        // Convert the image to a base64 string
-      
   
-        // Upload the base64 string to Firebase Storage
-            const response = await fetch(selectedImage);
-             const blob = await response.blob();
+        const response = await fetch(selectedImage);
+        const blob = await response.blob();
 
-         // Upload the Blob to Firebase Storage
-         await uploadBytes(storageRef, blob);
+        await uploadBytes(storageRef, blob);
   
-        // Get the download URL of the uploaded image
-      const dowmloadurl = await getDownloadURL(storageRef)
        
-            await addDoc(collection(db, "contacts"), {
+        const dowmloadurl = await getDownloadURL(storageRef)
+       
+        await addDoc(collection(db, "contacts"), {
             name: newContactName,
             phonenum: newContactNumber,
             image : dowmloadurl,
             email : user[0].email
         });
          
-        // Now you can use the downloadURL as needed (e.g., store it in Firebase Firestore)
         console.log('Download URL:', dowmloadurl);
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -83,7 +75,7 @@ const CreateContactScreen
   };
   
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
+  
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -94,9 +86,9 @@ const CreateContactScreen
     console.log(result);
   
     if (!result.canceled) {
-      // await uploadImageToFirestore();
       setSelectedImage(result.uri);
     }
+    
   };
   
 

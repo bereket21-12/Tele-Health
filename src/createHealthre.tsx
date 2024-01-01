@@ -5,9 +5,7 @@ const CreateHealthRecordScreen = (navigation) => {
   
 
   const handleSaveChanges = () => {
-    // Implement logic to save the edited data
-    // Add your logic here to save the edited data (e.g., update database, state, etc.)
-    // After saving, you may navigate back to the health record screen or perform other actions.
+
     navigation.goBack();
   };
 

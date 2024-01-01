@@ -5,7 +5,6 @@ const HealthScreen = ({ route, navigation }) => {
   const { originalData } = route.params
   return (
     <ScrollView style={styles.container}>
-      {/* Banner Image with Rounded Corners at the Top */}
       <View style={styles.bannerContainer}>
       <Image
           source={{
@@ -21,23 +20,23 @@ const HealthScreen = ({ route, navigation }) => {
 
       {/* Text Overlay */}
       <View style = {styles.itemcard}>
-       <Text>Detail :</Text>
-       <Text>{originalData?.detail}</Text>
+       <Text style={styles.detailText}>Detail: </Text>
+       <Text style={styles.detailText}>{originalData?.detail}</Text>
 
         </View>
         <View style = {styles.itemcard}>
-       <Text>Goal :</Text>
-       <Text>{originalData?.goals}</Text>
+       <Text style={styles.detailText}>Goal: </Text>
+       <Text style={styles.detailText}>{originalData?.goals}</Text>
 
         </View>
         <View style = {styles.itemcard}>
-       <Text>Benefits :</Text>
-       <Text>{originalData?.benefits}</Text>
+       <Text style={styles.detailText}>Benefits: </Text>
+       <Text style={styles.detailText}>{originalData?.benefits}</Text>
 
         </View>
         <View style = {styles.itemcard}>
-       <Text>Importance  :</Text>
-       <Text>{originalData?.importance}</Text>
+       <Text style={styles.detailText}>Importance: </Text>
+       <Text style={styles.detailText}>{originalData?.importance}</Text>
 
         </View>
 
@@ -49,7 +48,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  
   },
   bannerContainer: {
     width:'100%'
@@ -57,7 +55,6 @@ const styles = StyleSheet.create({
   bannerImage: {
     width: '100%',
     height: 400,
-    
   },
   textOverlay: {
     position: 'absolute',
@@ -82,13 +79,14 @@ const styles = StyleSheet.create({
   detailText: {
     fontSize: 18,
     marginBottom: 10,
-    color: '#000',
+    color: '#333',
   },
   gradientOverlay: {
     ...StyleSheet.absoluteFillObject,
   },
   itemcard:{
-    display : 'flex',flexDirection:"row",
+    display : 'flex',
+    flexDirection:"column",
     backgroundColor:"#fff", 
     alignItems:"center",
     shadowColor: '#000',

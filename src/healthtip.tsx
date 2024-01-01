@@ -16,81 +16,34 @@ const Tab = createBottomTabNavigator();
 const HealthTipsScreen = ({ route }) => {
 
   const navigation = useNavigation();
+  
 
   useEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
     navigation.setOptions({ title: routeName });
   }, [navigation, route]);
 
-
-  const tipsData = [
-                {
-                  id: 1,
-                  title: 'Eat a Balanced Diet',
-                  description: 'Include a variety of fruits, vegetables, lean proteins, and whole grains in your meals.',
-                  imageUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.8h31oE7dYVGsYxq3XEBspgHaHa%26pid%3DApi&f=1&ipt=dd6fa916e586e7dab38c96d8dfe089b1a59277ec6647b7808c23ea43b34933cb&ipo=images',
-                },
-                {
-                    id: 2,
-                    title: 'Eat a Balanced Diet',
-                    description: 'Include a variety of fruits, vegetables, lean proteins, and whole grains in your meals.',
-                    imageUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.8h31oE7dYVGsYxq3XEBspgHaHa%26pid%3DApi&f=1&ipt=dd6fa916e586e7dab38c96d8dfe089b1a59277ec6647b7808c23ea43b34933cb&ipo=images',
-                  },
-                  {
-                    id: 3,
-                    title: 'Eat a Balanced Diet',
-                    description: 'Include a variety of fruits, vegetables, lean proteins, and whole grains in your meals.',
-                    imageUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.8h31oE7dYVGsYxq3XEBspgHaHa%26pid%3DApi&f=1&ipt=dd6fa916e586e7dab38c96d8dfe089b1a59277ec6647b7808c23ea43b34933cb&ipo=images',
-                  },
-                  {
-                    id: 4,
-                    title: 'Eat a Balanced Diet',
-                    description: 'Include a variety of fruits, vegetables, lean proteins, and whole grains in your meals.',
-                    imageUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.8h31oE7dYVGsYxq3XEBspgHaHa%26pid%3DApi&f=1&ipt=dd6fa916e586e7dab38c96d8dfe089b1a59277ec6647b7808c23ea43b34933cb&ipo=images',
-                  },
-                  {
-                    id: 5,
-                    title: 'Eat a Balanced Diet',
-                    description: 'Include a variety of fruits, vegetables, lean proteins, and whole grains in your meals.',
-                    imageUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.8h31oE7dYVGsYxq3XEBspgHaHa%26pid%3DApi&f=1&ipt=dd6fa916e586e7dab38c96d8dfe089b1a59277ec6647b7808c23ea43b34933cb&ipo=images',
-                  },
-                  {
-                    id: 6,
-                    title: 'Eat a Balanced Diet',
-                    description: 'Include a variety of fruits, vegetables, lean proteins, and whole grains in your meals.',
-                    imageUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.8h31oE7dYVGsYxq3XEBspgHaHa%26pid%3DApi&f=1&ipt=dd6fa916e586e7dab38c96d8dfe089b1a59277ec6647b7808c23ea43b34933cb&ipo=images',
-                  },
-                  {
-                    id: 7,
-                    title: 'Eat a Balanced Diet',
-                    description: 'Include a variety of fruits, vegetables, lean proteins, and whole grains in your meals.',
-                    imageUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.8h31oE7dYVGsYxq3XEBspgHaHa%26pid%3DApi&f=1&ipt=dd6fa916e586e7dab38c96d8dfe089b1a59277ec6647b7808c23ea43b34933cb&ipo=images',
-                  },
-
-              ];
-
-        
-          return (
+ return (
             <View style={styles.container}>
            
                 <Tab.Navigator screenOptions={{headerShown : false}}
       
                 >
-                          <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            tabBarLabel: 'Home',
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="ios-home" color={color} size={size} />
-            ),
-          }}
+            <Tab.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{
+                  tabBarLabel: 'Home',
+                  tabBarIcon: ({ color, size }) => (
+                    <Ionicons name="ios-home" color={color} size={size} />
+                  ),
+                }}
         />
 
     
                 <Tab.Screen
-                    name="ChallengesScreen"
-                    component={ChallengesScreen}
+                    name="NotificationScreen"
+                    component={NotificationScreen}
                     options={{
                     tabBarLabel: 'ChallengesScreen',
                     tabBarIcon: ({ color, size }) => (
@@ -105,7 +58,7 @@ const HealthTipsScreen = ({ route }) => {
                     options={{
                     tabBarLabel: 'Appointment',
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="ios-notifications" color={color} size={size} />
+                        <Ionicons name="ios-calendar" color={color} size={size} />
                     ),
                     }}
       />
@@ -117,16 +70,16 @@ const HealthTipsScreen = ({ route }) => {
                     options={{
                    
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="ios-menu" color={color} size={size} />
+                        <Ionicons name="ios-person" color={color} size={size} />
                     ),
                     }}
       />
-                  {/* Add more tabs as needed */}
+                
                 </Tab.Navigator>
              
             </View>
-          );
-        };
+      );
+};
         
   const styles = StyleSheet.create({
   container: {

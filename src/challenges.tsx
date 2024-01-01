@@ -8,103 +8,87 @@ import { useAuth } from './AuthProvider';
 
 
 const ChallengesScreen = ({ navigation }) => {
-   const {user}  = useAuth()
-   let joined = false
- 
-    const [challenge ,setchallenge] = useState(null)
-    const [searchText, setSearchText] = useState('');
-  
-    const fetchChallenges = async (searchText) => {
-      try {
+  const { user } = useAuth();
+  const [challenge, setChallenge] = useState([]);
+  const [searchText, setSearchText] = useState('');
 
-        const filteredChallenges = challenge.filter(challenge =>
-          challenge.title.toLowerCase().includes(searchText.toLowerCase())
-        );
-
-        setchallenge( ()=> filteredChallenges);
-        console.log('Search results:', filteredChallenges);
-    
-      } catch (error) {
-        console.error('Error fetching challenges:', error);
-      }
-
-    };
-      
-    const joinedornot = async (searchText) => {
-      try {
-
-        const filteredChallenges = challenge.filter(challenge =>
-          challenge.participants.includes(user[0].id)
-        );
-
-        if 
-        (filteredChallenges != null){
-
-          joined = true
-        }
-    
-      } catch (error) {
-        console.error('Error fetching challenges:', error);
-      }
-
-    };
-    
-    
-
-
-  useEffect(()=>{
-
-    async function loder() {
-
-      const contactsCollection = collection(db, "challenges");
-      const contactsQuery =  query(contactsCollection);
+  const fetchChallenges = async (searchText) => {
+    try {
+      const contactsCollection = collection(db, 'challenges');
+      const contactsQuery = query(contactsCollection);
       const contactsSnapshot = await getDocs(contactsQuery);
-      const contactsData  =  contactsSnapshot.docs.map((doc) => ({
-       id: doc.id,
-       ...doc.data(),
-     }));
-
-     setchallenge( ()=> contactsData);
-      
+      const contactsData = contactsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      const filteredChallenges = contactsData.filter((challenge) =>
+        challenge.title.toLowerCase().includes(searchText.toLowerCase())
+      );
+      setChallenge(filteredChallenges);
+      console.log('Search results:', filteredChallenges);
+    } catch (error) {
+      console.error('Error fetching challenges:', error);
     }
+  };
 
-    loder()
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      try {
+        const contactsCollection = collection(db, 'challenges');
+        const contactsQuery = query(contactsCollection);
+        const contactsSnapshot = await getDocs(contactsQuery);
+        const contactsData = contactsSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setChallenge(contactsData);
+      } catch (error) {
+        console.error('Error fetching challenges:', error);
+      }
+    };
 
-  },[searchText.length == 0])
+    fetchChallenges();
+  }, []);
 
-  const renderChallengeCard = ({ item }) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => {
-        navigation.navigate('HealthChallengeDetailScreen', { challenge: item });
-      }}
-    >
-      <Image source={{ uri: item.image }} style={styles.cardImage} />
-      <View style={styles.cardTextContainer}>
-        <Text style={styles.cardTitle}>{item.title}</Text>
-        <Text style={styles.cardDescription}>{item.Description}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const renderChallengeCard = ({ item }) => {
+    const joined = item.participants.includes(user[0]?.id);
+
+    return (
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => {
+          navigation.navigate('HealthChallengeDetailScreen', { challenge: item });
+        }}
+      >
+        <Image source={{ uri: item.image }} style={styles.cardImage} />
+        <View style={styles.cardTextContainer}>
+          <Text style={styles.cardTitle}>{item.title}</Text>
+          <Text style={styles.cardDescription}>{item.Description}</Text>
+          <Text style={styles.joined}>{joined ? 'Joined' : 'Not joined'}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
-    <View style={styles.searchcontainer}>
-      <TextInput
-        style={styles.input}
-        placeholder='Search'
-        onChangeText={(text) => {setSearchText(text) ,fetchChallenges(searchText) }}
-        value={searchText}
-  
-      />
-      <Icon
-        name="search"
-        type="material"
-        color="#555"
-        onPress={()=>fetchChallenges(searchText)}
-      
-      />
-    </View>
+      <View style={styles.searchcontainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Search"
+          onChangeText={(text) => {
+            setSearchText(text);
+            fetchChallenges(text);
+          }}
+          value={searchText}
+        />
+        <Icon
+          name="search"
+          type="material"
+          color="#555"
+          onPress={() => fetchChallenges(searchText)}
+        />
+      </View>
       <FlatList
         data={challenge}
         keyExtractor={(item) => item.id}
@@ -141,6 +125,12 @@ const styles = StyleSheet.create({
   cardDescription: {
     fontSize: 14,
     color: '#555',
+  },
+  joined: {
+    fontSize: 14,
+    color: 'red',
+    alignSelf:"flex-end",
+    marginTop:5
   },
   searchcontainer: {
     flexDirection: 'row',

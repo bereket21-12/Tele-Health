@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { doc, setDoc } from "firebase/firestore"; 
-import { db, firebase_auth } from './firebaseConfig';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useAuth } from './AuthProvider'; // Import the useAuth hook
 
 

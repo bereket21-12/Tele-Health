@@ -8,8 +8,6 @@ import { useAuth } from './AuthProvider';
 const HealthRecordScreen = ({ navigation }) => {
   const [data, setData] = useState(null);
   const { user } = useAuth();
-  const [timestamp, setTimestamp] = useState(null);
-
   const contactsCollection = collection(db, "health_rec");
   const contactsQuery = query(contactsCollection, where('userid', '==', `${user[0].id}`));
 
@@ -63,23 +61,25 @@ const HealthRecordScreen = ({ navigation }) => {
         <Text style={styles.cardDate}>{item.selectedDate ?.toLocaleString()}</Text>
         <Icon name="edit" size={20} color="#fff" />
       </View>
-      <View style={styles.recordContainer}>
-        <View style={styles.recordItem}>
-          <Text style={styles.recordLabel}>Weight:</Text>
-          <Text style={styles.recordValue}>{item.weight}</Text>
-        </View>
-        <View style={styles.recordItem}>
-          <Text style={styles.recordLabel}>Blood Pressure:</Text>
-          <Text style={styles.recordValue}>{item.pressure}</Text>
-        </View>
-        <View style={styles.recordItem}>
-          <Text style={styles.recordLabel}>Steps:</Text>
-          <Text style={styles.recordValue}>{item.step}</Text>
-        </View>
-        <View style={styles.recordItem}>
-          <Text style={styles.recordLabel}>Heart Rate:</Text>
-          <Text style={styles.recordValue}>{item.heartRate}</Text>
-        </View>
+      <View style={styles.recordItem}>
+        <Icon name="weight" size={24} color="#349867" />
+        <Text style={styles.recordLabel}>Weight:</Text>
+        <Text style={styles.recordValue}>{item.weight}</Text>
+      </View>
+      <View style={styles.recordItem}>
+        <Icon name="heartbeat" size={24} color="#e74c3c" />
+        <Text style={styles.recordLabel}>Blood Pressure:</Text>
+        <Text style={styles.recordValue}>{item.pressure}</Text>
+      </View>
+      <View style={styles.recordItem}>
+        <Icon name="walking" size={24} color="#2ecc71" />
+        <Text style={styles.recordLabel}>Steps:</Text>
+        <Text style={styles.recordValue}>{item.step}</Text>
+      </View>
+      <View style={styles.recordItem}>
+        <Icon name="heart" size={24} color="#f39c12" />
+        <Text style={styles.recordLabel}>Heart Rate:</Text>
+        <Text style={styles.recordValue}>{item.heartRate}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     marginTop: "5%"
   },
   card: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#1d4e62',
     borderRadius: 10,
     marginBottom: 16,
     padding: 16,
@@ -120,22 +120,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
   },
-  recordContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
   recordItem: {
-    flex: 1,
-    marginHorizontal: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 4,
   },
   recordLabel: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
+    marginLeft: 8,
   },
   recordValue: {
     fontSize: 14,
     color: '#fff',
+    marginLeft: 4,
   },
   addButton: {
     position: 'absolute',

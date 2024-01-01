@@ -39,8 +39,6 @@ const AppointmentScreen = () => {
 
     loder()
 
-   
-
 
   },[])
 
@@ -49,9 +47,6 @@ const AppointmentScreen = () => {
     navigation.navigate('DetailedAppointmentScreen', { doctorName: de })
     
   }
-
-
-
 
   function convertTo24HourFormat(timeString) {
 
@@ -62,22 +57,11 @@ const AppointmentScreen = () => {
 }
 
   return (
+    
     <ScrollView style={styles.container}>
-      {/* Header Component */}
 
-      {/* Available Doctors Component */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Available Doctors</Text>
-        {/* {availableDoctors.map((doctor) => (
-          <Card
-            key={doctor.id}
-            title={`${doctor.name}, ${doctor.specialty}`}
-            content=""
-            time = {doctor.workingtime}
-            imageUri={doctor.avatarUri}
-             onPress={() =>handel(doctor) }
-          />
-        ))} */}
 
         {
             doctor?.map(value => {

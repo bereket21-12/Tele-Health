@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform,Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from './firebaseConfig';
+import { useAuth } from './AuthProvider';
 
 const DetailedAppointmentScreen = ({ route, navigation }) => {
 
@@ -8,15 +11,13 @@ const DetailedAppointmentScreen = ({ route, navigation }) => {
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-
+  const {user} = useAuth();
   const { doctorName } = route.params;
   
   const start = doctorName.start
   const end = doctorName.end
   const startone = convertTo24HourFormat(start);
   const endone = convertTo24HourFormat(end);
-
-  // Get the hour component
 
   const handleDateChange = (event, date) => {
 
@@ -52,9 +53,15 @@ const DetailedAppointmentScreen = ({ route, navigation }) => {
 
   };
 
-  const handleBookAppointment = () => {
-    // Add logic to handle the booking of the appointment
-    // You can use the selected date and time, and doctorName for further processing
+  const handleBookAppointment = async () => {
+    await addDoc(collection(db, "myappointment"), {
+      selectedDate,
+      selectedTime,
+      userid:user[0].id,
+      name:doctorName.name
+
+     }).then(()=>console.log
+     ("appointment created"))
   };
 
   return (
@@ -64,8 +71,7 @@ const DetailedAppointmentScreen = ({ route, navigation }) => {
       <Text style={styles.name}>{doctorName.name}</Text>
       <Text style={styles.specialization}>{doctorName.area}</Text>
       <Text style={styles.workingTime}>{`Working Time: ${startone}:00AM-${endone}:00AM `}</Text>
-      {/* <Text style={styles.otherInfo}>{`Other Info: ${doctorName.id}`}</Text> */}
-      {/* Add more details as needed */}
+
     </View>
       <TouchableOpacity style={styles.datePickerButton} onPress={() => setShowDatePicker(true)}>
         <Text style={styles.datePickerButtonText}>
@@ -131,7 +137,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 8,
     marginBottom: 20,
-    width: '80%',
+    width:  '100%',
     alignItems: 'center',
   },
   datePickerButtonText: {
@@ -143,7 +149,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 8,
     marginBottom: 20,
-    width: '80%',
+    width:  '100%',
     alignItems: 'center',
   },
   timePickerButtonText: {
@@ -154,7 +160,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#27ae60',
     padding: 15,
     borderRadius: 8,
-    width: '80%',
+    width: '100%',
     alignItems: 'center',
   },
   bookButtonText: {
@@ -184,7 +190,7 @@ const styles = StyleSheet.create({
   },
   maincard: {
     backgroundColor: '#fff',
-    borderRadius: 8,
+    borderRadius: 22,
     padding: 16,
     marginBottom: 16,
     shadowColor: '#000',
@@ -192,7 +198,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
-    width: '80%',
+    width: '100%',
     alignContent:"center",
     alignItems:"center"
   },
