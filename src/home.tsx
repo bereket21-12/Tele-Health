@@ -16,9 +16,9 @@ const HomeScreen = ({ navigation }) => {
 
   // Dummy data for cards
   const cardsData = [
-    { title: 'Health Record', route: 'HealthRecordScreen', src: require('../assets/health_rec.png') },
-    { title: 'Challenges', route: 'ChallengesScreen', src: require('../assets/challenges.jpg') },
-    { title: 'Health Resources', route: 'TipList', src: require('../assets/healthtips.jpg') },
+    { title: 'Health Record', route: 'My Record', src: require('../assets/health_rec.png') },
+    { title: 'Challenges', route: 'Challenges', src: require('../assets/challenges.jpg') },
+    { title: 'Health Resources', route: 'Health Tips', src: require('../assets/healthtips.jpg') },
     { title: 'My Appointment', route: 'MyAppointmentScreen', src: require('../assets/appointment.jpg') },
   ];
 

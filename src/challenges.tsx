@@ -57,7 +57,7 @@ const ChallengesScreen = ({ navigation }) => {
       <TouchableOpacity
         style={styles.card}
         onPress={() => {
-          navigation.navigate('HealthChallengeDetailScreen', { challenge: item });
+          navigation.navigate('More', { challenge: item });
         }}
       >
         <Image source={{ uri: item.image }} style={styles.cardImage} />

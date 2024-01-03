@@ -4,9 +4,10 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, ImageBackground, Scrol
 import { db } from './firebaseConfig';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useAuth } from './AuthProvider';
+import Icone from 'react-native-vector-icons/FontAwesome5';
 
 
-const UserProfileScreen =  () => {
+const UserProfileScreen =  ({navigation}) => {
 
   const [data, setData] = useState(null);
   const {user} =  useAuth()
@@ -34,7 +35,7 @@ const UserProfileScreen =  () => {
   const handleEditProfile = async () => {
     // Add navigation logic or other actions for editing the profile
     console.log('Edit profile pressed');
-
+    navigation.navigate('EditProfile');
 
   };
 
@@ -42,47 +43,41 @@ const UserProfileScreen =  () => {
     <ScrollView style={styles.container}>
 
             {/* Cover Image */}
-            <ImageBackground source={{ uri:'https://placekitten.com/200/200' }} style={styles.coverImage}>
+            <ImageBackground source={{ uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGV1weBVr-auowy5lC9fBXMvk81UZ1qiPaNA&usqp=CAU' }} style={styles.coverImage}>
         {/* Profile Image */}
         <View style={styles.profileImageContainer}>
           <Image source={{ uri: user[0].image }} style={styles.profileImage} />
+          
         </View>
 
-        {/* Edit Button */}
      
       </ImageBackground>
-      {/* <View style={styles.header}>
-        <Image
-          source={{ uri: 'https://placekitten.com/200/200' }} // Replace with your user's profile picture URL
-          style={styles.profileImage}
-        />
-        <Text style={styles.username}>John Doe</Text>
-        <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
+      <View style={styles.editButton}>
+
+         <Text style={{fontSize:19}}>{user[0].name}</Text>
+         <Icone onPress={handleEditProfile} style={{color:"blue"}} name="edit" size={20} color="#000" />
+      </View>
+         {/* <TouchableOpacity style={styles.editButton}>
           <Text style={styles.editButtonText}>Edit</Text>
-        </TouchableOpacity>
-      </View> */}
-         <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editButtonText}>Edit</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <View style={styles.userInfoContainer}>
         <Text style={styles.userName}> {user[0].name}</Text>
 
         <View style = {styles.itemcard}>
-        <Icon name="md-call" size={30} color="#3498db" style={styles.icon} /><Text>Email Address</Text>
+        <Icon name="md-mail" size={30} color="#fff" style={styles.icon} /><Text style={{color:"#fff"}}>Email Address</Text>
 
         </View>
         <Text style={styles.bio}>{user[0].email }</Text>
         <View style = {styles.itemcard}>
-        <Icon name="md-call" size={30} color="#3498db" style={styles.icon} /><Text>UserName</Text>
+        <Icon name="md-call" size={30} color="#fff" style={styles.icon} /><Text style={{color:"#fff"}}>UserName</Text>
 
         </View>
         <Text style={styles.bio}>{user[0].name}</Text>
         <View style = {styles.itemcard}>
-        <Icon name="md-call" size={30} color="#3498db" style={styles.icon} /><Text>Phone Number</Text>
+        <Icon name="md-call" size={30} color="#fff" style={styles.icon} /><Text style={{color:"#fff"}}>Phone Number</Text>
 
         </View>
-        <Text style={styles.bio}>{user[0].gender}</Text>
-        {/* Add more user information components as needed */}
+       
       </View>
     </ScrollView>
   );
@@ -120,11 +115,14 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
   },
   editButton: {
-    backgroundColor: '#3498db',
     padding: 12,
     borderRadius: 10,
     alignSelf: 'center',
     marginTop: '25%',
+    fontSize:19,
+    display:'flex',
+    flexDirection:'row',
+    gap:15
   },
   editButtonText: {
     color: '#fff',
@@ -147,7 +145,7 @@ const styles = StyleSheet.create({
   },
   itemcard:{
     display : 'flex',flexDirection:"row",
-    backgroundColor:"#AEDEFC", 
+    backgroundColor:"#575f61", 
     alignItems:"center",
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

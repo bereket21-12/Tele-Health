@@ -60,8 +60,13 @@ const DetailedAppointmentScreen = ({ route, navigation }) => {
       userid:user[0].id,
       name:doctorName.name
 
-     }).then(()=>console.log
-     ("appointment created"))
+     }).then(()=>{
+
+      alert(`You have booked appointment successfully`)
+      navigation.goBack()
+     }
+     
+     )
   };
 
   return (

@@ -120,7 +120,7 @@ const EmergencyContactsScreen = ({ navigation }) => {
   const handleCallContact = (recordId) => {
     // Add logic to initiate a call to the provided phone number
     console.log("\n data"+JSON.stringify(data.find(record => record.id === recordId)))
-    navigation.navigate('DetailedContactScreen', { originalData: data.find(record => record.id === recordId) });
+    navigation.navigate('Edit Contact', { originalData: data.find(record => record.id === recordId) });
   };
 
   const makeCall = async (phoneNumber) => {
@@ -150,7 +150,7 @@ const EmergencyContactsScreen = ({ navigation }) => {
       />
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate('CreateContactScreen')}
+        onPress={() => navigation.navigate('New Contact')}
       >
         <Icon name="md-add" size={25} color="#fff" />
       </TouchableOpacity>

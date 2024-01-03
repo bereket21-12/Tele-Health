@@ -1,17 +1,13 @@
-// authProvider.js
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { db, useFirebaseAuth } from './firebaseConfig'; // Assuming you have a useFirebaseAuth hook
-import { collection, getDocs, query, where } from 'firebase/firestore';
-//import { useNavigation } from '@react-navigation/native';
+import { collection, getDocs, query, setDoc, where } from 'firebase/firestore';
 
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-   //const navigation = useNavigation();
-
   const { firebase_auth } = useFirebaseAuth(); // Adjust this based on your firebase configuration
 
   useEffect(() => {
@@ -31,14 +27,14 @@ export const AuthProvider = ({ children }) => {
        const contactsQuery =  query(contactsCollection, where('email', '==', `${loggedInUser.email}`));
        const contactsSnapshot = await getDocs(contactsQuery);
        const contactsData  =  contactsSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+            id: doc.id,
+            ...doc.data(),
+       }));
       setUser( ()=> contactsData);
       console.log("Logged \n"+contactsQuery[0])
      
       return contactsData
-      // Handle any additional logic after successful login
+
     } catch (error) {
       alert("Incorrect Email or Password")
       console.error('Login error:', error.message);
@@ -50,17 +46,39 @@ export const AuthProvider = ({ children }) => {
 
   };
 
+  const update =(userDocRef,name,email,age,gender,weight,height,selectedImage)=>{
+
+    const newuser =   setDoc(userDocRef, {name , email ,age ,gender ,weight ,height ,image:selectedImage}, { merge: true })
+    .then(async () => {
+      const contactsCollection = collection(db, "user");
+       const contactsQuery =  query(contactsCollection, where('email', '==', `${email}`));
+       const contactsSnapshot = await getDocs(contactsQuery);
+       const contactsData  =  contactsSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+       }));
+      setUser( ()=> contactsData);
+    })
+    .catch((error) => {
+      console.error('Error updating data:', error);
+    });
+  
+  }
+
   const signOut = async () => {
+
     try {
       await firebase_auth.signOut();
       // Additional cleanup or state updates can be done here
+      console.log("Signout Successfully")
+
     } catch (error) {
       console.error('Error logging out:', error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login ,signOut }}>
+    <AuthContext.Provider value={{ user, login ,signOut,update }}>
       {children}
     </AuthContext.Provider>
   );

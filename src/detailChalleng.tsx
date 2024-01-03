@@ -15,7 +15,7 @@ const HealthChallengeDetailScreen = ({ route, navigation }) => {
 
   const paricipant = ()=>{
 
-    navigation.navigate('HealthAppParticipants', { challenge:challenge });
+    navigation.navigate('Participants', { challenge:challenge });
 
   }
 

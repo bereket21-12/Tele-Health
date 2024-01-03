@@ -9,9 +9,12 @@ const SettingsScreen = ({ navigation }) => {
 
     const { user, signOut } = useAuth(); 
 
-    const handleLogout = async () => {
+    const handleLogout =() => {
+      console.log("SIgnout clicked")
       try {
-        await signOut(); // Perform sign-out
+         signOut(); // Perform sign-out
+        navigation.navigate("LoginPage");
+
       } catch (error) {
         console.error('Error logging out:', error);
       }
@@ -57,10 +60,16 @@ const SettingsScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {renderCard('Profile', 'account-circle', '#3498db', 'UserProfileScreen')}
-      {renderCard('Security', 'security', '#2ecc71', 'Security')}
+      {renderCard('Security', 'security', '#2ecc71', 'Change Password')}
       {renderCard('About Us', 'info', '#6417e8', 'AboutUsScreen')}
-      {renderCard('Logout', 'logout', '#f39c12', 'Logout')}
+      {/* {renderCard('Logout', 'logout', '#f39c12', 'Logout')} */}
       {renderCard('Delete Account', 'delete', '#e74c3c', 'DeleteAccount')}
+      <Card style={styles.card} onPress={() => handleLogout()}>
+      <Card.Content style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Icon name={"logout"} size={24} color={"#f39c12"} style={styles.icon} />
+        <Text style={{ marginLeft: 16, color: "#f39c12" }}>{"Logout"}</Text>
+      </Card.Content>
+    </Card>
     </View>
   );
 };

@@ -19,7 +19,7 @@ const DetailedContactScreen = ({ route, navigation }) => {
 
   const handleUpdate = () => {
     
-        setDoc(userDocRef, { name: name, phonenum: phoneNumber }, { merge: true })
+        setDoc(userDocRef, { name: name, phonenum: phoneNumber, image:selectedImage }, { merge: true })
       .then(() => {
         console.log('Update successful');
       })
@@ -28,7 +28,7 @@ const DetailedContactScreen = ({ route, navigation }) => {
       });
     navigation.goBack();
 
-  };
+  }
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library

@@ -17,7 +17,8 @@ const LoginPage = ({navigation}) => {
         if(await login(email, password))
              navigation.navigate('HealthTipsScreen');
       
-      // User is logged in successfully
+      setemail('')
+      setpassword('')
     } catch (error) {
       console.error("Login error:", error.message);
       // Handle login error, e.g., display an error message to the user
@@ -33,6 +34,8 @@ const LoginPage = ({navigation}) => {
 
   const handleForgotPassword = () => {
     console.log('Forgot Password pressed');
+    navigation.navigate('Forgot Password');
+
   };
 
   const handleGoogleLogin =async  () => {

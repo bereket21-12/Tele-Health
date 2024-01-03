@@ -52,7 +52,7 @@ const HealthRecordScreen = ({ navigation }) => {
 
   const handelcreate = () => {
     console.log("create clicked")
-    navigation.navigate('CreateRect');
+    navigation.navigate('New Record');
   };
 
   const renderHealthRecordCard = ({ item }) => (

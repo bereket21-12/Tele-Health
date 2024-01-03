@@ -27,6 +27,9 @@ import MyAppointmentScreen from './src/myAppointment';
 import SettingsScreen from './src/settings';
 import AboutUsScreen from './src/us';
 import * as Notifications from 'expo-notifications';
+import EditProfile from './src/editProfile';
+import ChangePassword from './src/changePassword';
+import ForgotPassword from './src/forgotPassword';
 
 export default function App() {
 
@@ -49,32 +52,34 @@ export default function App() {
   
 
   return (
-    <AuthProvider >
+    <AuthProvider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="LoginPage" >
         {/* <Stack.Screen name ="ChallengesScreen" component={ChallengesScreen}/> */}
-        <Stack.Screen name="CreateContactScreen" component = {CreateContactScreen}/>
-        <Stack.Screen name="HealthChallengeDetailScreen" component = {HealthChallengeDetailScreen}/>
+        <Stack.Screen name="New Contact" component = {CreateContactScreen}/>
+        <Stack.Screen name="More" component = {HealthChallengeDetailScreen}/>
         <Stack.Screen name="home" component={HomeScreen}/>
         <Stack.Screen name="LoginPage" component={LoginPage} />
         <Stack.Screen name="UserRegistrationScreen" component={UserRegistrationScreen} />
         <Stack.Screen name="HealthTipsScreen" component={HealthTipsScreen} />
-        <Stack.Screen name="HealthRecordScreen" component={HealthRecordScreen} />
+        <Stack.Screen name="My Record" component={HealthRecordScreen} />
         <Stack.Screen name ="EditHealthRecordScreen" component={EditHealthRecordScreen} />
         <Stack.Screen name="CreateHealthRecordScreen" component={CreateHealthRecordScreen} />
         <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} />
         <Stack.Screen name="DetailedAppointmentScreen" component={DetailedAppointmentScreen} />
         <Stack.Screen name="NotificationScreen" component={NotificationScreen}/>
-        <Stack.Screen name="DetailedContactScreen" component={DetailedContactScreen}/>
-        <Stack.Screen name="HealthAppParticipants" component={HealthAppParticipants}/>
-        <Stack.Screen name='TipList' component={TipList}/>
+        <Stack.Screen name="Edit Contact" component={DetailedContactScreen}/>
+        <Stack.Screen name="Participants" component={HealthAppParticipants}/>
+        <Stack.Screen name='Health Tips' component={TipList}/>
         <Stack.Screen name='detailResource' component={detailResource}/>
-        <Stack.Screen name='CreateRect' component={CreateRecord}/>
+        <Stack.Screen name='New Record' component={CreateRecord}/>
         <Stack.Screen name='MyAppointmentScreen' component={MyAppointmentScreen}/>
         <Stack.Screen name='SettingsScreen' component={SettingsScreen}/>
         <Stack.Screen name='AboutUsScreen' component={AboutUsScreen}/>
-        <Stack.Screen name='ChallengesScreen' component={ChallengesScreen}/>
-
+        <Stack.Screen name='Challenges' component={ChallengesScreen}/>
+        <Stack.Screen name='EditProfile' component={EditProfile}/>
+        <Stack.Screen name='Change Password' component={ChangePassword}/>
+        <Stack.Screen name='Forgot Password' component={ForgotPassword}/>
       </Stack.Navigator>
     </NavigationContainer>
     </AuthProvider>

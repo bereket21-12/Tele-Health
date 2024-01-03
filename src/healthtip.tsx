@@ -26,10 +26,10 @@ const HealthTipsScreen = ({ route }) => {
  return (
             <View style={styles.container}>
            
-                <Tab.Navigator screenOptions={{headerShown : false}}
+                <Tab.Navigator screenOptions={{headerShown : false} }
       
                 >
-            <Tab.Screen
+            <Tab.Screen 
                 name="Home"
                 component={HomeScreen}
                 options={{
@@ -42,7 +42,7 @@ const HealthTipsScreen = ({ route }) => {
 
     
                 <Tab.Screen
-                    name="NotificationScreen"
+                    name="Notification"
                     component={NotificationScreen}
                     options={{
                     tabBarLabel: 'ChallengesScreen',
@@ -53,7 +53,7 @@ const HealthTipsScreen = ({ route }) => {
       />
     
                 <Tab.Screen
-                    name="Appointment"
+                    name="Doctors"
                     component={AppointmentScreen}
                     options={{
                     tabBarLabel: 'Appointment',
@@ -65,7 +65,7 @@ const HealthTipsScreen = ({ route }) => {
 
 
        <Tab.Screen
-                    name="EmergencyContactsScreen" //contact list
+                    name="Contacts" //contact list
                     component={EmergencyContactsScreen}
                     options={{
                    
