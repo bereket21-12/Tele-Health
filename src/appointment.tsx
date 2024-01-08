@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { collection, query, where, getDocs, doc } from 'firebase/firestore';
+import { collection, query, getDocs, doc } from 'firebase/firestore';
 import { db } from './firebaseConfig';
 
 

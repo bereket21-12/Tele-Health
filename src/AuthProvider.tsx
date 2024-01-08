@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   }, [firebase_auth]);
 
   const login = async (email, password) => {
+
     
     try {
        const userCredential = await signInWithEmailAndPassword(firebase_auth, email, password)
@@ -30,9 +31,9 @@ export const AuthProvider = ({ children }) => {
             id: doc.id,
             ...doc.data(),
        }));
-      setUser( ()=> contactsData);
+      setUser(contactsData[0]);
       console.log("Logged \n"+contactsQuery[0])
-     
+      console.log(contactsData[0])
       return contactsData
 
     } catch (error) {
@@ -40,7 +41,7 @@ export const AuthProvider = ({ children }) => {
       console.error('Login error:', error.message);
 
       return  null
-      // Handle login error, e.g., display an error message to the user
+
     }
 
 
@@ -48,16 +49,18 @@ export const AuthProvider = ({ children }) => {
 
   const update =(userDocRef,name,email,age,gender,weight,height,selectedImage)=>{
 
-    const newuser =   setDoc(userDocRef, {name , email ,age ,gender ,weight ,height ,image:selectedImage}, { merge: true })
+     setDoc(userDocRef, {name  ,age ,gender ,weight ,height ,image:selectedImage}, { merge: true })
     .then(async () => {
       const contactsCollection = collection(db, "user");
-       const contactsQuery =  query(contactsCollection, where('email', '==', `${email}`));
-       const contactsSnapshot = await getDocs(contactsQuery);
-       const contactsData  =  contactsSnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-       }));
-      setUser( ()=> contactsData);
+      const contactsQuery =  query(contactsCollection, where('email', '==', `${email}`));
+      const contactsSnapshot = await getDocs(contactsQuery);
+      const contactsData  =  contactsSnapshot.docs.map((doc) => ({
+           id: doc.id,
+           ...doc.data(),
+      }));
+     setUser(contactsData[0]);
+
+       
     })
     .catch((error) => {
       console.error('Error updating data:', error);
@@ -69,7 +72,6 @@ export const AuthProvider = ({ children }) => {
 
     try {
       await firebase_auth.signOut();
-      // Additional cleanup or state updates can be done here
       console.log("Signout Successfully")
 
     } catch (error) {

@@ -49,7 +49,7 @@ const HealthAppParticipants = ({ route, navigation }) => {
     };
   
     loader();
-  }, [challenge.id, db,user[0].challenges]);
+  }, [challenge.id, db,user.challenges]);
  
 
   const renderItem = ({ item }) => (

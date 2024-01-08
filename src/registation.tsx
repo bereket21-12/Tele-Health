@@ -1,19 +1,20 @@
-import { setDoc, doc, addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView ,Image} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView ,Image, Platform} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { db, firebase_auth } from './firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import * as ImagePicker from 'expo-image-picker';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 
 const UserRegistrationScreen = ({navigation}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [age, setAge] = useState('');
-  const [gender, setGender] = useState('male'); // Default to male
+  const [gender, setGender] = useState('male');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
@@ -28,43 +29,78 @@ const UserRegistrationScreen = ({navigation}) => {
       const storage = getStorage();
       const fileref = `images/${Date.now()}.jpg`
       const storageRef = ref(storage, fileref);
+
+      const response = await fetch(selectedImage);
+      const blob = await response.blob();
+
       
-      // Convert the image to a base64 string
-    
-
-      // Upload the base64 string to Firebase Storage
-          const response = await fetch(selectedImage);
-           const blob = await response.blob();
-
-       // Upload the Blob to Firebase Storage
-       await uploadBytes(storageRef, blob);
-
-      // Get the download URL of the uploaded image
-    const dowmloadurl = await getDownloadURL(storageRef)
+      await uploadBytes(storageRef, blob);
+      const dowmloadurl = await getDownloadURL(storageRef)
      
-      await addDoc(collection(db, "user"), {
-      name,
-      email,
-      age,
-      gender,
-      height,
-      weight,
-      challenges : [],
-      image :dowmloadurl
-     });
+        await addDoc(collection(db, "user"), {
+        name,
+        email,
+        age,
+        gender,
+        height,
+        weight,
+        challenges : [],
+        image :dowmloadurl
+      });
        
-      // Now you can use the downloadURL as needed (e.g., store it in Firebase Firestore)
       console.log('Download URL:', dowmloadurl);
     } catch (error) {
       console.error('Error uploading image:', error);
     }
-    console.log('User registered:', { name, email, password, age, gender, height, weight });
 
+    console.log('User registered:', { name, email, password, age, gender, height, weight });
     await  createUserWithEmailAndPassword(firebase_auth ,email,password)
-    navigation.navigate('LoginPage');
+
+
+   // notification
+   async function registerForPushNotificationsAsync() {
+        let token;
+
+        if (Platform.OS === 'android') {
+          await Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+          });
+        }
+
+        if (Device.isDevice) {
+          const { status: existingStatus } = await Notifications.getPermissionsAsync();
+          let finalStatus = existingStatus;
+          if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+          }
+          if (finalStatus !== 'granted') {
+            alert('Failed to get push token for push notification!');
+            return;
+          }
+
+          token = (await Notifications.getExpoPushTokenAsync({ projectId: 'b1134ed4-c689-49dc-aadf-2e22206366f8' })).data;
+          console.log(token);
+        } else {
+          alert('Must use physical device for Push Notifications');
+        }
+
+        return token;
+     }
+
+
+
+    const notificationToken =await registerForPushNotificationsAsync() 
+    console.log("notificationToken",notificationToken);
+
+     navigation.navigate('LoginPage');
+
   };
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
+  
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -75,13 +111,13 @@ const UserRegistrationScreen = ({navigation}) => {
     console.log(result);
   
     if (!result.canceled) {
-      // await uploadImageToFirestore();
+    
       setSelectedImage(result.uri);
     }
   };
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>User Registration</Text>
+      <Text style={styles.title}>Registration</Text>
       <View >
       <TouchableOpacity onPress={pickImage}>
         <Text style={styles.imagespicertext}>Pick an image</Text>
@@ -195,9 +231,9 @@ const pickerSelectStyles = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
-    // justifyContent: 'center',
     padding: 16,
     margin:15
   },
@@ -205,6 +241,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
+    alignSelf:"center"
   },
   fieldContainer: {
     marginBottom: 16,

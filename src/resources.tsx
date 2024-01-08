@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { collection, query, getDocs } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import { ScrollView, TouchableOpacity, View ,Image,Text,StyleSheet, FlatList} from "react-native";
+import { TouchableOpacity, View ,Image,Text,StyleSheet, FlatList} from "react-native";
 import { Icon } from "react-native-elements";
 import { TextInput } from "react-native-gesture-handler";
 import { db } from "./firebaseConfig";

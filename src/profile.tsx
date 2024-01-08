@@ -13,27 +13,26 @@ const UserProfileScreen =  ({navigation}) => {
   const {user} =  useAuth()
   
   useEffect( () => {
-     async function dataloader ()  {
+  //    async function dataloader ()  {
 
-      const docRef = doc(db, "user", "bereket21cc@outlook.com");
-      const docSnap =  await getDoc(docRef);
-      if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      setData(docSnap.data());
-      console.log(data);
-     } else {
-      // docSnap.data() will be undefined in this case
-      console.log("No such document!");
-     }
-    }
+  //     const docRef = doc(db, "user", "bereket21cc@outlook.com");
+  //     const docSnap =  await getDoc(docRef);
+  //     if (docSnap.exists()) {
+  //     console.log("Document data:", docSnap.data());
+  //     setData(docSnap.data());
+  //     console.log(data);
+  //    } else {
+  //     console.log("No such document!");
+  //    }
+  //   }
 
-    dataloader()
+  //   dataloader()
 
     
-  }, []);
+  }, [user]);
 
   const handleEditProfile = async () => {
-    // Add navigation logic or other actions for editing the profile
+
     console.log('Edit profile pressed');
     navigation.navigate('EditProfile');
 
@@ -42,11 +41,11 @@ const UserProfileScreen =  ({navigation}) => {
   return (
     <ScrollView style={styles.container}>
 
-            {/* Cover Image */}
-            <ImageBackground source={{ uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGV1weBVr-auowy5lC9fBXMvk81UZ1qiPaNA&usqp=CAU' }} style={styles.coverImage}>
-        {/* Profile Image */}
+           
+        <ImageBackground source={{ uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGV1weBVr-auowy5lC9fBXMvk81UZ1qiPaNA&usqp=CAU' }} style={styles.coverImage}>
+      
         <View style={styles.profileImageContainer}>
-          <Image source={{ uri: user[0].image }} style={styles.profileImage} />
+          <Image source={{ uri: user.image }} style={styles.profileImage} />
           
         </View>
 
@@ -54,25 +53,23 @@ const UserProfileScreen =  ({navigation}) => {
       </ImageBackground>
       <View style={styles.editButton}>
 
-         <Text style={{fontSize:19}}>{user[0].name}</Text>
+         <Text style={{fontSize:19}}>{user.name}</Text>
          <Icone onPress={handleEditProfile} style={{color:"blue"}} name="edit" size={20} color="#000" />
       </View>
-         {/* <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editButtonText}>Edit</Text>
-        </TouchableOpacity> */}
+
         <View style={styles.userInfoContainer}>
-        <Text style={styles.userName}> {user[0].name}</Text>
+        <Text style={styles.userName}> {user.name}</Text>
 
         <View style = {styles.itemcard}>
         <Icon name="md-mail" size={30} color="#fff" style={styles.icon} /><Text style={{color:"#fff"}}>Email Address</Text>
 
         </View>
-        <Text style={styles.bio}>{user[0].email }</Text>
+        <Text style={styles.bio}>{user.email }</Text>
         <View style = {styles.itemcard}>
         <Icon name="md-call" size={30} color="#fff" style={styles.icon} /><Text style={{color:"#fff"}}>UserName</Text>
 
         </View>
-        <Text style={styles.bio}>{user[0].name}</Text>
+        <Text style={styles.bio}>{user.name}</Text>
         <View style = {styles.itemcard}>
         <Icon name="md-call" size={30} color="#fff" style={styles.icon} /><Text style={{color:"#fff"}}>Phone Number</Text>
 

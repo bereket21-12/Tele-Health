@@ -1,17 +1,20 @@
-// AppointmentScreen.js
-import { collection, query, getDocs } from 'firebase/firestore';
+import { collection, query, getDocs, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { db } from './firebaseConfig';
+import { useAuth } from './AuthProvider';
 
 const MyAppointmentScreen = () => {
 
-const [challenge, setChallenge] = useState(null);
+    const [challenge, setChallenge] = useState(null);
+    const {user} = useAuth()
 
   useEffect(() => {
     async function loader() {
       const contactsCollection = collection(db, "myappointment");
-      const contactsQuery = query(contactsCollection);
+      const contactsQuery = query(contactsCollection, where('userid', '==', `${user.id}`));
+
+      // const contactsQuery = query(contactsCollection);
       const contactsSnapshot = await getDocs(contactsQuery);
       const contactsData = contactsSnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -27,7 +30,7 @@ const [challenge, setChallenge] = useState(null);
     const selectedDate = item.selectedDate?.toDate();
   
     if (!selectedDate) {
-      return null; // Handle the case where selectedDate is undefined
+      return null;
     }
   
     const currentDate = new Date();
@@ -48,7 +51,7 @@ const [challenge, setChallenge] = useState(null);
   
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>My Appointments</Text>
+  
       <FlatList
         data={challenge}
         keyExtractor={(item) => item.id}

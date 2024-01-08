@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import 'firebase/storage';
-import { storage,app, db } from './firebaseConfig';
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
-import { getStorage, ref, uploadString, getDownloadURL, uploadBytes, StorageReference } from 'firebase/storage';
+import { db } from './firebaseConfig';
+import { addDoc, collection } from 'firebase/firestore';
+import { getStorage, ref, getDownloadURL, uploadBytes, StorageReference } from 'firebase/storage';
 import 'firebase/storage';
 import { useAuth } from './AuthProvider';
 
@@ -43,7 +43,7 @@ const CreateContactScreen
             name: newContactName,
             phonenum: newContactNumber,
             image : dowmloadurl,
-            email : user[0].email
+            email : user.email
         });
          
         console.log('Download URL:', dowmloadurl);
@@ -51,29 +51,10 @@ const CreateContactScreen
         console.error('Error uploading image:', error);
       }
       
-      navigation.navigate('EmergencyContactsScreen');
+      navigation.navigate('Contacts');
 
   };
 
-  const uploadImageToFirestore = async () => {
-    try {
-      const storage = getStorage();
-      const fileref = `images/${Date.now()}.jpg`;
-      // const storageRef = ref(storage, fileref);
-  
-
-      const byteArray = Uint8Array.from(atob(selectedImage.split(',')[1]), (c) => c.charCodeAt(0));
-      const storageRef = ref(storage, `images/${Date.now()}.jpg`);
-      // Convert the image to a base64 string
-  
-      await uploadData(storageRef, byteArray, 'data_url');
-      const downloadURL = await getDownloadURL(storageRef);
-      console.log('Image uploaded successfully!', downloadURL);
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
-  };
-  
   const pickImage = async () => {
   
     let result = await ImagePicker.launchImageLibraryAsync({

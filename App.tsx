@@ -5,7 +5,6 @@ import Login from './src/login';
 import UserProfileScreen from './src/profile';
 import ChallengesScreen from './src/challenges';
 import HealthRecordScreen from './src/healthrec';
-import EmergencyContactsScreen from './src/emergencycontact';
 import UserRegistrationScreen from './src/registation';
 import NotificationScreen from './src/notification';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -31,49 +30,86 @@ import EditProfile from './src/editProfile';
 import ChangePassword from './src/changePassword';
 import ForgotPassword from './src/forgotPassword';
 
+
 export default function App() {
 
   const Stack = createStackNavigator(); //screenOptions={{headerShown : false}}
 
 
-  useEffect(()=>{async function registerForPushNotificationsAsync() {
-    const { status } = await Notifications.requestPermissionsAsync();
-    try {
-      const { status } = await Notifications.requestPermissionsAsync();
-      if (status === 'granted') {
-        const token = (await Notifications.getExpoPushTokenAsync()).data;
-        console.log('Expo Push Token:', token);
-      }
-    } catch (error) {
-      console.error('Error fetching Expo token:', error);
-    }}
-    registerForPushNotificationsAsync()
-  },[]);
-  
+  // useEffect(()=>{
+  //   const getNOtificatinPermission = async () => {
 
+  //     const {status} = await Notifications.requestPermissionsAsync()
+
+  //     if(status !== 'granted'){
+  //       alert("Permission to recive Notification was denied")
+  //     }else{
+  //       alert("Permission granted")
+  //     }
+      
+   
+    
+  //   }
+  //   const scheduleNotification = ()=> {
+
+  //     Notifications.scheduleNotificationAsync({
+  //       content: {
+  //         title: 'Notification Title',
+  //         body: 'This is the notification body text',
+  //       },
+  //       trigger: {
+  //         seconds: 5,
+  //       },
+  //     });
+  //   }
+  //   const notificationListener = Notifications.addNotificationReceivedListener((notification)=>{
+  //     console.log('Notification reciverd : ' ,notification)
+  //     {
+  //       <Text>{notification.date}</Text>
+  //     }
+  //   })
+
+
+  //   getNOtificatinPermission()
+  //   scheduleNotification()
+  //   return() =>{
+
+  //     Notifications.removeNotificationSubscription(notificationListener)
+  //   }
+
+  // },[]);
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  });
+  
+  
   return (
     <AuthProvider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="LoginPage" >
-        {/* <Stack.Screen name ="ChallengesScreen" component={ChallengesScreen}/> */}
         <Stack.Screen name="New Contact" component = {CreateContactScreen}/>
         <Stack.Screen name="More" component = {HealthChallengeDetailScreen}/>
-        <Stack.Screen name="home" component={HomeScreen}/>
-        <Stack.Screen name="LoginPage" component={LoginPage} />
+        <Stack.Screen name="home" component={HomeScreen} options={{headerShown : false}}/>
+        <Stack.Screen name="LoginPage" component={LoginPage}  options={{headerShown : false}}/>
         <Stack.Screen name="UserRegistrationScreen" component={UserRegistrationScreen} />
         <Stack.Screen name="HealthTipsScreen" component={HealthTipsScreen} />
         <Stack.Screen name="My Record" component={HealthRecordScreen} />
         <Stack.Screen name ="EditHealthRecordScreen" component={EditHealthRecordScreen} />
         <Stack.Screen name="CreateHealthRecordScreen" component={CreateHealthRecordScreen} />
-        <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} />
+        <Stack.Screen name="Profile" component={UserProfileScreen} />
         <Stack.Screen name="DetailedAppointmentScreen" component={DetailedAppointmentScreen} />
         <Stack.Screen name="NotificationScreen" component={NotificationScreen}/>
         <Stack.Screen name="Edit Contact" component={DetailedContactScreen}/>
         <Stack.Screen name="Participants" component={HealthAppParticipants}/>
-        <Stack.Screen name='Health Tips' component={TipList}/>
+        <Stack.Screen name='Health Tips' component={TipList}  />
         <Stack.Screen name='detailResource' component={detailResource}/>
         <Stack.Screen name='New Record' component={CreateRecord}/>
-        <Stack.Screen name='MyAppointmentScreen' component={MyAppointmentScreen}/>
+        <Stack.Screen name='My Appointment' component={MyAppointmentScreen}/>
         <Stack.Screen name='SettingsScreen' component={SettingsScreen}/>
         <Stack.Screen name='AboutUsScreen' component={AboutUsScreen}/>
         <Stack.Screen name='Challenges' component={ChallengesScreen}/>
@@ -95,3 +131,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+

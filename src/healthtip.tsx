@@ -1,13 +1,10 @@
 import React, { useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, getFocusedRouteNameFromRoute, useNavigation, useRoute } from '@react-navigation/native';
+import {getFocusedRouteNameFromRoute, useNavigation} from '@react-navigation/native';
 import AppointmentScreen from './appointment';
-import Login from './login';
 import NotificationScreen from './notification';
-import UserProfileScreen from './profile';
-import ChallengesScreen from './challenges';
 import HomeScreen from './home';
 import EmergencyContactsScreen from './emergencycontact';
 
@@ -26,9 +23,7 @@ const HealthTipsScreen = ({ route }) => {
  return (
             <View style={styles.container}>
            
-                <Tab.Navigator screenOptions={{headerShown : false} }
-      
-                >
+                <Tab.Navigator screenOptions={{headerShown : false} }>
             <Tab.Screen 
                 name="Home"
                 component={HomeScreen}
@@ -38,6 +33,7 @@ const HealthTipsScreen = ({ route }) => {
                     <Ionicons name="ios-home" color={color} size={size} />
                   ),
                 }}
+              
         />
 
     
@@ -45,7 +41,7 @@ const HealthTipsScreen = ({ route }) => {
                     name="Notification"
                     component={NotificationScreen}
                     options={{
-                    tabBarLabel: 'ChallengesScreen',
+                    tabBarLabel: 'Notification',
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="ios-notifications" color={color} size={size} />
                     ),

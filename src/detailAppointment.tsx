@@ -41,7 +41,6 @@ const DetailedAppointmentScreen = ({ route, navigation }) => {
 
 
     const selectedHour = time.getHours();
-      const selectedMinute = time.getMinutes();
       const isWithinRange = selectedHour >= startone &&( selectedHour < endone );
       if (isWithinRange) {
         setSelectedTime(time);
@@ -57,7 +56,7 @@ const DetailedAppointmentScreen = ({ route, navigation }) => {
     await addDoc(collection(db, "myappointment"), {
       selectedDate,
       selectedTime,
-      userid:user[0].id,
+      userid:user.id,
       name:doctorName.name
 
      }).then(()=>{
@@ -120,6 +119,7 @@ const DetailedAppointmentScreen = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
     padding: 16,

@@ -1,4 +1,4 @@
-import { setDoc, doc } from 'firebase/firestore';
+import { doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView ,Image} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
@@ -10,14 +10,14 @@ const EditProfile = ({navigation}) => {
   const {user} = useAuth()
   const{update} = useAuth()
 
-  const [name, setName] = useState(user[0].name);
-  const [email, setEmail] = useState(user[0].email);
-  const [age, setAge] = useState(user[0].age);
-  const [gender, setGender] = useState(user[0].gender); // Default to male
-  const [height, setHeight] = useState(user[0].height);
-  const [weight, setWeight] = useState(user[0].weight);
-  const [selectedImage, setSelectedImage] = useState(user[0].image);
-  const userDocRef = doc(db, 'user', user[0].id); // Pass the original data from the health 
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [age, setAge] = useState(user.age);
+  const [gender, setGender] = useState(user.gender); // Default to male
+  const [height, setHeight] = useState(user.height);
+  const [weight, setWeight] = useState(user.weight);
+  const [selectedImage, setSelectedImage] = useState(user.image);
+  const userDocRef = doc(db, 'user', user.id); // Pass the original data from the health 
   useEffect(() => {
     
   }, [user])
@@ -27,7 +27,7 @@ const EditProfile = ({navigation}) => {
   const handleUpdate = () => {
 
   update(userDocRef, name , email ,age ,gender ,weight ,height ,selectedImage)
-  navigation.goBack();
+  navigation.navigate('Profile');
 
 };
 
@@ -72,17 +72,7 @@ const EditProfile = ({navigation}) => {
           onChangeText={(text) => setName(text)}
         />
       </View>
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>Email:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your email"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-        />
-      </View>
+
 
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>Age:</Text>

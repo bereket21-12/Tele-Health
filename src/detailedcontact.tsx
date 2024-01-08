@@ -1,6 +1,5 @@
-// DetailedContactScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Image, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
 import { deleteDoc, doc, setDoc } from 'firebase/firestore';
@@ -31,7 +30,7 @@ const DetailedContactScreen = ({ route, navigation }) => {
   }
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
+
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -42,7 +41,7 @@ const DetailedContactScreen = ({ route, navigation }) => {
     console.log(result);
   
     if (!result.canceled) {
-      // await uploadImageToFirestore();
+
       setSelectedImage(result.uri);
     }
   };

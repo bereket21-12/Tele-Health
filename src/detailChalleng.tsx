@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { collection, query, doc, updateDoc, arrayUnion, DocumentData, DocumentReference, arrayRemove } from 'firebase/firestore';
+import { collection, doc, updateDoc, arrayUnion, DocumentData, DocumentReference, arrayRemove, setDoc, getDocs, query } from 'firebase/firestore';
 import { db } from './firebaseConfig';
 import 'firebase/firestore'
 import { useAuth } from './AuthProvider';
-
+import * as Notifications from 'expo-notifications';
 
 
 const HealthChallengeDetailScreen = ({ route, navigation }) => {
   const { challenge } = route.params;
   const {user} = useAuth()
-  const userDocRef = doc(db, 'challenges', challenge.id);
-
 
   const paricipant = ()=>{
 
@@ -23,10 +21,10 @@ const HealthChallengeDetailScreen = ({ route, navigation }) => {
     try {
       const challengesCollection = doc(db, 'challenges', challenge.id);
       await updateDoc(challengesCollection, {
-        participants: arrayRemove(user[0].id),
+        participants: arrayRemove(user.id),
       });
   
-      const userCollection = doc(db, 'user', user[0].id); // Update to your users collection name
+      const userCollection = doc(db, 'user', user.id); // Update to your users collection name
       await updateDoc(userCollection, {
         challenges: arrayRemove(challenge.id),
       });
@@ -37,19 +35,77 @@ const HealthChallengeDetailScreen = ({ route, navigation }) => {
       console.error('Error handling deletion:', error);
     }
   };
- 
-  const  Handeljoin  = () => { 
+
+  const sendNotification = async () => {
+    try {
   
+      const userres =query( collection(db, 'user'));
+      const UsersSnapshot = await getDocs(userres);
+      UsersSnapshot.forEach(async (userDoc) => {
+        console.log("userDoc.data(); ",userDoc.data());
+        if(userDoc.data().token){
+          const { token } = userDoc.data();
+
+        
+          console.log("retoken ",token)
+
+        try {
+          console.log("token ",token);
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              to: token,
+              title: "New user Joined Challenge",
+              body: 'Check out new Member.',
+              data: {
+     
+              },
+              sound: "default",
+            },
+            trigger: { seconds: 2 },
+          });
+         
+        } catch (error) {
+          console.error("Error scheduling notification:", error);
+        }
+      }
+      });
+    } catch (error) {
+      console.error("Error sending notifications to employees:", error);
+    }
+  };
+
+ 
+  const  Handeljoin  = async () => { 
+
+    
     
     const challengesCollection = doc(db, "challenges",challenge.id)
     updateDoc(challengesCollection ,{
-     participants:arrayUnion(user[0].id)
+     participants:arrayUnion(user.id)
     })
-    const usercollection = doc(db, "user",user[0].id)
+    const usercollection = doc(db, "user",user.id)
     updateDoc(usercollection ,{
       challenges:arrayUnion(challenge.id)
      })
     alert(`You have joined ${challenge.title} successfully`)
+
+
+    try {
+      const notificationRef = doc(collection(db, `notification`));
+
+      await setDoc(notificationRef, {
+        type: "Join",
+        userid: user.id,
+        challenge:challenge.title,
+        user:user.name,
+        time :new Date()
+      });
+      sendNotification()
+    } catch (error) {
+
+      console.error('Error Pushing notification to realtime database',error.message)
+      
+    }
 
 
    }

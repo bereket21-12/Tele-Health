@@ -1,25 +1,41 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, ScrollView} from 'react-native';
-import { Card } from 'react-native-elements'; // Assuming you are using a UI library like react-native-elements
-import { AntDesign, Ionicons } from '@expo/vector-icons';
-import MaterialCommunityIcons from 'react-native-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from './AuthProvider';
+import fetchUserChallenges from './myChallenges';
 const HomeScreen = ({ navigation }) => {
+
+  const{user} = useAuth();
+  const [challenge,setUserChallenges] = useState(null)
+
+  const fetch = async () => {
+    try {
+      const userChallenges = await fetchUserChallenges(user.id);
+     
+      setUserChallenges(()=>userChallenges);
+ 
+    } catch (error) {
+     
+    }
+  };
+  
+
+
   useEffect(() => {
-    // Dynamically set the title
+   
     navigation.setOptions({
       title: 'Home',
     });
-  }, [navigation]);
+    fetch()
 
-  const { user } = useAuth();
+  }, [challenge]);
 
-  // Dummy data for cards
+
   const cardsData = [
     { title: 'Health Record', route: 'My Record', src: require('../assets/health_rec.png') },
     { title: 'Challenges', route: 'Challenges', src: require('../assets/challenges.jpg') },
     { title: 'Health Resources', route: 'Health Tips', src: require('../assets/healthtips.jpg') },
-    { title: 'My Appointment', route: 'MyAppointmentScreen', src: require('../assets/appointment.jpg') },
+    { title: 'My Appointment', route: 'My Appointment', src: require('../assets/appointment.jpg') },
   ];
 
   return (
@@ -31,8 +47,8 @@ const HomeScreen = ({ navigation }) => {
     >
           <View style={styles.overlay}>
             <View style={styles.header}>
-              <TouchableOpacity onPress={() => navigation.navigate('UserProfileScreen')}>
-                <Image source={{ uri: user[0].image }} style={styles.profilePicture} />
+              <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                <Image source={{ uri: user?.image }} style={styles.profilePicture} />
               </TouchableOpacity>
               <TouchableOpacity>
                 <Ionicons name="settings" color={'white'} size={30} onPress={() => navigation.navigate('SettingsScreen')} />
@@ -40,7 +56,7 @@ const HomeScreen = ({ navigation }) => {
             </View>
 
             <View style={styles.welcome}>
-              <Text style={styles.welcomeText1}>Hi {user ? `${user[0].name}` : `Bereket`}</Text>
+              <Text style={styles.welcomeText1}>Hi {user ? `${user?.name}` : `Bereket`}</Text>
               <Text style={styles.welcomeText}>Welcome to Campus Health </Text>
             </View>
 
@@ -55,18 +71,28 @@ const HomeScreen = ({ navigation }) => {
 
             <View style={styles.bottom}>
               <Text style={styles.story}>Your Stories</Text>
-              <Text>Challenge Completed</Text>
-              <Image source={{ uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.mkeL8Hod34Zi264DK6zssQHaEK%26pid%3DApi&f=1&ipt=3f86505c3c01338836964a8f2f192aede9b81f2fd1676f09ffe2bb7ab21d49b1&ipo=images' }} style={styles.cardPicture} />
-              <Text>Addtional Information about the app</Text>
-              <Text>Addtional Information about the app</Text>
-              <Image source={{ uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.KFB0WSDqeuQwmA_h6gs78gHaDP%26pid%3DApi&f=1&ipt=df89d331c60cf0feb9d3837de657f12f0159e38d35fdb3e9270cb1620d290ab9&ipo=images' }} style={styles.cardPicture} />
-              <Text>Addtional Information about the app</Text>
-              <Text>Addtional Information about the app</Text>
-              <Text>Addtional Information about the app</Text>
-              <Text>Addtional Information about the app</Text>
-              <Text>Addtional Information about the app</Text>
-              <Text>Addtional Information about the app</Text>
-              <Text>Addtional Information about the app</Text>
+              <Text>Joined Challenge</Text>
+      
+              {challenge && challenge.length > 0 && (
+        challenge.map((challenge, index) => (
+          
+            <TouchableOpacity
+              key={index} // Make sure to include a unique key for each challenge
+              style={styles.challenges}
+              onPress={() => {
+                navigation.navigate('More', { challenge });
+              }}
+            >
+              <Image source={{ uri: challenge.image }} style={[styles.cardImage, styles.cardPicture]} />
+              <View style={styles.cardTextContainer}>
+                <Text style={styles.cardTitle}>{challenge.title}</Text>
+                <Text style={styles.cardDescription}>{challenge.Description}</Text>
+              </View>
+            </TouchableOpacity>
+        ))
+      )}
+ 
+
             </View>
           </View>
         </ImageBackground>
@@ -150,6 +176,16 @@ const styles = StyleSheet.create({
      borderRadius: 9,
     
   },
+  challenges: {
+    flex: 1,
+    marginHorizontal: 3,
+    paddingTop:10,
+    height : 350,
+    width: '100%',
+     borderRadius: 9,
+     paddingEnd:23
+    
+  },
     bottom:{
     paddingTop:'15%',
     alignItems:'center',
@@ -159,9 +195,10 @@ const styles = StyleSheet.create({
   story : {
     fontWeight:"bold",
     fontSize:23,
-    alignSelf:"flex-start",
+    alignSelf:"center",
     paddingLeft:23,
     fontStyle : "italic"
+    
 
   },
   welcome:{
@@ -173,7 +210,24 @@ const styles = StyleSheet.create({
     paddingHorizontal:0,
     fontSize : 18,
     
-  }
+  },
+  cardImage: {
+    width: '100%',
+    height: 150,
+    resizeMode: 'cover',
+  },
+  cardTextContainer: {
+    padding: 16,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  cardDescription: {
+    fontSize: 14,
+    color: '#555',
+  },
 });
 
 export default HomeScreen;

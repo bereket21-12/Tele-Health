@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import 'firebase/storage';
-import { storage,app, db } from './firebaseConfig';
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
-import { getStorage, ref, uploadString, getDownloadURL, uploadBytes, StorageReference } from 'firebase/storage';
+import {StorageReference } from 'firebase/storage';
 import 'firebase/storage';
-import { useAuth } from './AuthProvider';
 import { sendPasswordResetEmail ,getAuth} from 'firebase/auth';
 
 const ForgotPassword
@@ -16,29 +12,28 @@ const auth = getAuth()
   
   const [email, setEmail] = useState('');
   
-
-
   const addContact = async () => {
-try {
-    await sendPasswordResetEmail(auth,email,{
-        handleCodeInApp: true,
-        url: 'https://www.google.com'
-    })
-    .then(()=>{
-        alert("Reset Email sent successfully")
-        navigation.navigate('LoginPage');
-      })
-    
-      .catch((error)=>{
 
-        console.log("Error sending password reset email",error.message)
-        alert("Failed to send password reset email")
-    })
-} catch (error) {
-    
-}
-      
-  };
+              try {
+                  await sendPasswordResetEmail(auth,email,{
+                      handleCodeInApp: true,
+                      url: 'https://www.google.com'
+                  })
+                  .then(()=>{
+                      alert("Reset Email sent successfully")
+                      navigation.navigate('LoginPage');
+                    })
+                  
+                    .catch((error)=>{
+
+                      console.log("Error sending password reset email",error.message)
+                      alert("Failed to send password reset email")
+                  })
+              } catch (error) {
+                  
+              }
+                    
+        };
 
  
 

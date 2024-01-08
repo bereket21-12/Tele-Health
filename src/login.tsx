@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity } from "react-native";
+import { KeyboardAvoidingView, Platform, TextInput, TouchableOpacity } from "react-native";
 import { View ,StyleSheet , Text,Image} from "react-native";
 import { heightPercentageToDP as hp ,widthPercentageToDP as wp } from "react-native-responsive-screen";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -18,7 +18,7 @@ const Login = ({navigation}) => {
       setChecked(!isChecked);
       
     };
-    // const handel = () => {navigation.navigate('HealthTipsScreen')}
+  
 
     const onLoginPress =async  () => {
       await createUserWithEmailAndPassword(firebase_auth, email, password);

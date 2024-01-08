@@ -1,9 +1,7 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { addDoc, collection } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
-import { db, firebase_auth } from './firebaseConfig';
+import { db } from './firebaseConfig';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useAuth } from './AuthProvider';
 
@@ -17,7 +15,7 @@ const CreateRecord = ( {navigation} ) => {
   const [heartRate, setHearRate] = useState('');
   const [step, setStep] = useState('');
   const [weight, setWeight] = useState('');
-  const[userid,setUserId] = useState(user[0].id)
+  const[userid,setUserId] = useState(user.id)
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleDateChange = (event, date) => {
@@ -49,7 +47,7 @@ const CreateRecord = ( {navigation} ) => {
 
 
    
-    navigation.navigate('HealthRecordScreen');
+    navigation.navigate('My Record');
   };
 
   return (

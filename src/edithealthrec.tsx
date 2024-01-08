@@ -8,15 +8,13 @@ import { db } from './firebaseConfig';
 const EditHealthRecordScreen = ({ route, navigation }) => {
   const { originalData } = route.params
   const {user} = useAuth()
-  const userDocRef = doc(db, 'health_rec', originalData.id); // Pass the original data from the health originalData screen
-
-
+  const userDocRef = doc(db, 'health_rec', originalData.id); 
   const [selectedDate, setSelectedDate] = useState(originalData.selectedDate);
   const [pressure, setPressure] = useState(originalData.pressure);
   const [heartRate, setHearRate] = useState(originalData.heartRate);
   const [step, setStep] = useState(originalData.step);
   const [weight, setWeight] = useState(originalData.weight);
-  const[userid,setUserId] = useState(user[0].id)
+  const[userid,setUserId] = useState(user.id)
   const [showDatePicker, setShowDatePicker] = useState(false);
 
 

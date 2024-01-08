@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useAuth } from './AuthProvider'; // Import the useAuth hook
+import { useAuth } from './AuthProvider'; 
 
 
 const LoginPage = ({navigation}) => {
@@ -14,14 +14,16 @@ const LoginPage = ({navigation}) => {
  
     try {
      
-        if(await login(email, password))
-             navigation.navigate('HealthTipsScreen');
+        await login(email, password).then(()=>{
+
+          navigation.navigate('HealthTipsScreen');
+        })
       
       setemail('')
       setpassword('')
     } catch (error) {
       console.error("Login error:", error.message);
-      // Handle login error, e.g., display an error message to the user
+     
     }
 
 

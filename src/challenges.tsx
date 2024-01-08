@@ -5,6 +5,7 @@ import { db } from './firebaseConfig';
 import { TextInput } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { useAuth } from './AuthProvider';
+import { registerForPushNotificationsAsync, sendPushNotification } from './NotificationUtility';
 
 
 const ChallengesScreen = ({ navigation }) => {
@@ -32,6 +33,7 @@ const ChallengesScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
+
     const fetchChallenges = async () => {
       try {
         const contactsCollection = collection(db, 'challenges');
@@ -51,7 +53,7 @@ const ChallengesScreen = ({ navigation }) => {
   }, []);
 
   const renderChallengeCard = ({ item }) => {
-    const joined = item.participants.includes(user[0]?.id);
+    const joined = item.participants.includes(user?.id);
 
     return (
       <TouchableOpacity

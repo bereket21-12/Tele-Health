@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import 'firebase/storage';
-import { storage,app, db } from './firebaseConfig';
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
-import { getStorage, ref, uploadString, getDownloadURL, uploadBytes, StorageReference } from 'firebase/storage';
+import { StorageReference } from 'firebase/storage';
 import 'firebase/storage';
-import { useAuth } from './AuthProvider';
-import { EmailAuthCredential, EmailAuthProvider, getAuth,reauthenticateWithCredential,updatePassword } from 'firebase/auth';
+import {EmailAuthProvider, getAuth,reauthenticateWithCredential,updatePassword } from 'firebase/auth';
 
 const ChangePassword
  = ({ navigation }) => {
@@ -44,6 +40,7 @@ const ChangePassword
 
 
   return (
+    
     <View style={styles.container}>
       <Text style={styles.header}>Change Password</Text>
       <View style={styles.inputContainer}>
@@ -73,12 +70,11 @@ const ChangePassword
 };
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     padding: 16,
     alignContent :"center",
-    
-    
   },
   buttonText: {
     fontSize: 18,

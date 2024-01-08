@@ -9,7 +9,7 @@ const HealthRecordScreen = ({ navigation }) => {
   const [data, setData] = useState(null);
   const { user } = useAuth();
   const contactsCollection = collection(db, "health_rec");
-  const contactsQuery = query(contactsCollection, where('userid', '==', `${user[0].id}`));
+  const contactsQuery = query(contactsCollection, where('userid', '==', `${user.id}`));
 
   useEffect(() => {
     async function dataloader() {
@@ -26,15 +26,15 @@ const HealthRecordScreen = ({ navigation }) => {
               pressure: doc.data().pressure,
               step: doc.data().step,
               heartRate: doc.data().heartRate,
-              // Add other fields as needed
+              
             };
           } else {
             console.warn(`Invalid selectedDate for document with ID: ${doc.id}`);
-            return null; // Skip this item in the mapping
+            return null; 
           }
         });
 
-        // Remove null entries from the array
+     
         const filteredContactsData = contactsData.filter(item => item !== null);
 
         setData(filteredContactsData);
@@ -44,7 +44,7 @@ const HealthRecordScreen = ({ navigation }) => {
     }
 
     dataloader();
-  }, [data]); // Only run on mount
+  }, [data]);
 
   const handeledit = (recordId) => {
     navigation.navigate('EditHealthRecordScreen', { originalData: data.find(record => record.id === recordId) });

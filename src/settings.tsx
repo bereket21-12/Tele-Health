@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
-import { Card, Title, Text, Button } from 'react-native-paper';
+import { Card, Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAuth } from './AuthProvider';
 
@@ -12,7 +12,7 @@ const SettingsScreen = ({ navigation }) => {
     const handleLogout =() => {
       console.log("SIgnout clicked")
       try {
-         signOut(); // Perform sign-out
+         signOut();
         navigation.navigate("LoginPage");
 
       } catch (error) {
@@ -37,9 +37,7 @@ const SettingsScreen = ({ navigation }) => {
         {
           text: 'Delete',
           onPress: () => {
-            // Perform account deletion logic here
-            // You might want to navigate to a different screen or log the user out
-            // Example: navigation.navigate('Login');
+
           },
           style: 'destructive',
         },
@@ -59,11 +57,11 @@ const SettingsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {renderCard('Profile', 'account-circle', '#3498db', 'UserProfileScreen')}
+      {renderCard('Profile', 'account-circle', '#3498db', 'Profile')}
       {renderCard('Security', 'security', '#2ecc71', 'Change Password')}
       {renderCard('About Us', 'info', '#6417e8', 'AboutUsScreen')}
-      {/* {renderCard('Logout', 'logout', '#f39c12', 'Logout')} */}
       {renderCard('Delete Account', 'delete', '#e74c3c', 'DeleteAccount')}
+      
       <Card style={styles.card} onPress={() => handleLogout()}>
       <Card.Content style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Icon name={"logout"} size={24} color={"#f39c12"} style={styles.icon} />
