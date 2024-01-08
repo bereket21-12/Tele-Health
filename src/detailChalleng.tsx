@@ -42,7 +42,7 @@ const HealthChallengeDetailScreen = ({ route, navigation }) => {
       const userres =query( collection(db, 'user'));
       const UsersSnapshot = await getDocs(userres);
       UsersSnapshot.forEach(async (userDoc) => {
-        console.log("userDoc.data(); ",userDoc.data());
+        // console.log("userDoc.data(); ",userDoc.data());
         if(userDoc.data().token){
           const { token } = userDoc.data();
 
@@ -54,8 +54,8 @@ const HealthChallengeDetailScreen = ({ route, navigation }) => {
           await Notifications.scheduleNotificationAsync({
             content: {
               to: token,
-              title: "New user Joined Challenge",
-              body: 'Check out new Member.',
+              title: `New Member.`,
+              body: `${user.name} Joined ${challenge.title}`,
               data: {
      
               },
@@ -116,10 +116,10 @@ const HealthChallengeDetailScreen = ({ route, navigation }) => {
       <View style={styles.detailsContainer}>
         <Text style={styles.challengeTitle}>{challenge.title}</Text>
         <Text style={styles.challengeDescription}>{challenge.Description}</Text>
+        <Text style={styles.challengeDetails}>Goals : {challenge.Goals}</Text>
         <Text style={styles.challengeStartDate}>Start Date: {challenge.Start_Date}</Text>
         <Text style={styles.challengeDuration}>End Date: {challenge.End_Date}</Text>
         {/* Additional Challenge Details */}
-        <Text style={styles.challengeDetails}>Goals : {challenge.Goals}</Text>
       </View>
       <TouchableOpacity
         style={styles.joinButton}

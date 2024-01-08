@@ -58,22 +58,22 @@ const UserProfileScreen =  ({navigation}) => {
       </View>
 
         <View style={styles.userInfoContainer}>
-        <Text style={styles.userName}> {user.name}</Text>
+       
 
         <View style = {styles.itemcard}>
-        <Icon name="md-mail" size={30} color="#fff" style={styles.icon} /><Text style={{color:"#fff"}}>Email Address</Text>
+        <Icon name="md-mail" size={25} color="#fff" style={styles.icon} /><Text style={{color:"#fff"}}>Email Address</Text>
 
         </View>
         <Text style={styles.bio}>{user.email }</Text>
         <View style = {styles.itemcard}>
-        <Icon name="md-call" size={30} color="#fff" style={styles.icon} /><Text style={{color:"#fff"}}>UserName</Text>
+        <Icone name="user" size={25} color="#fff" style={styles.icon} /><Text style={{color:"#fff"}}>UserName</Text>
 
         </View>
         <Text style={styles.bio}>{user.name}</Text>
         <View style = {styles.itemcard}>
-        <Icon name="md-call" size={30} color="#fff" style={styles.icon} /><Text style={{color:"#fff"}}>Phone Number</Text>
-
+        <Icone name="plus" size={25} color="#fff" style={styles.icon} /><Text style={{color:"#fff"}}>Age </Text>
         </View>
+        <Text style={styles.bio}>{user.age}</Text>
        
       </View>
     </ScrollView>
@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginLeft: 1,
+    paddingEnd:4
   },
   profileImage: {
     width: 150,

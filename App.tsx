@@ -33,51 +33,8 @@ import ForgotPassword from './src/forgotPassword';
 
 export default function App() {
 
-  const Stack = createStackNavigator(); //screenOptions={{headerShown : false}}
+  const Stack = createStackNavigator(); 
 
-
-  // useEffect(()=>{
-  //   const getNOtificatinPermission = async () => {
-
-  //     const {status} = await Notifications.requestPermissionsAsync()
-
-  //     if(status !== 'granted'){
-  //       alert("Permission to recive Notification was denied")
-  //     }else{
-  //       alert("Permission granted")
-  //     }
-      
-   
-    
-  //   }
-  //   const scheduleNotification = ()=> {
-
-  //     Notifications.scheduleNotificationAsync({
-  //       content: {
-  //         title: 'Notification Title',
-  //         body: 'This is the notification body text',
-  //       },
-  //       trigger: {
-  //         seconds: 5,
-  //       },
-  //     });
-  //   }
-  //   const notificationListener = Notifications.addNotificationReceivedListener((notification)=>{
-  //     console.log('Notification reciverd : ' ,notification)
-  //     {
-  //       <Text>{notification.date}</Text>
-  //     }
-  //   })
-
-
-  //   getNOtificatinPermission()
-  //   scheduleNotification()
-  //   return() =>{
-
-  //     Notifications.removeNotificationSubscription(notificationListener)
-  //   }
-
-  // },[]);
 
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -96,7 +53,7 @@ export default function App() {
         <Stack.Screen name="More" component = {HealthChallengeDetailScreen}/>
         <Stack.Screen name="home" component={HomeScreen} options={{headerShown : false}}/>
         <Stack.Screen name="LoginPage" component={LoginPage}  options={{headerShown : false}}/>
-        <Stack.Screen name="UserRegistrationScreen" component={UserRegistrationScreen} />
+        <Stack.Screen name="New Account" component={UserRegistrationScreen} />
         <Stack.Screen name="HealthTipsScreen" component={HealthTipsScreen} />
         <Stack.Screen name="My Record" component={HealthRecordScreen} />
         <Stack.Screen name ="EditHealthRecordScreen" component={EditHealthRecordScreen} />
@@ -110,7 +67,7 @@ export default function App() {
         <Stack.Screen name='detailResource' component={detailResource}/>
         <Stack.Screen name='New Record' component={CreateRecord}/>
         <Stack.Screen name='My Appointment' component={MyAppointmentScreen}/>
-        <Stack.Screen name='SettingsScreen' component={SettingsScreen}/>
+        <Stack.Screen name='Settings' component={SettingsScreen}/>
         <Stack.Screen name='AboutUsScreen' component={AboutUsScreen}/>
         <Stack.Screen name='Challenges' component={ChallengesScreen}/>
         <Stack.Screen name='EditProfile' component={EditProfile}/>

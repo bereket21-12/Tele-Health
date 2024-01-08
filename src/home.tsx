@@ -51,7 +51,7 @@ const HomeScreen = ({ navigation }) => {
                 <Image source={{ uri: user?.image }} style={styles.profilePicture} />
               </TouchableOpacity>
               <TouchableOpacity>
-                <Ionicons name="settings" color={'white'} size={30} onPress={() => navigation.navigate('SettingsScreen')} />
+                <Ionicons name="settings" color={'white'} size={30} onPress={() => navigation.navigate('Settings')} />
               </TouchableOpacity>
             </View>
 

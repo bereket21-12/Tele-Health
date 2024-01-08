@@ -14,10 +14,10 @@ const LoginPage = ({navigation}) => {
  
     try {
      
-        await login(email, password).then(()=>{
+       if( await login(email, password) ){
 
           navigation.navigate('HealthTipsScreen');
-        })
+        }
       
       setemail('')
       setpassword('')
@@ -31,7 +31,7 @@ const LoginPage = ({navigation}) => {
 
   const handleSignUp = () => {
     console.log('Sign Up pressed');
-    navigation.navigate('UserRegistrationScreen');
+    navigation.navigate('New Account');
   };
 
   const handleForgotPassword = () => {

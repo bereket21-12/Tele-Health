@@ -52,7 +52,7 @@ const EditProfile = ({navigation}) => {
   };
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>User Registration</Text>
+
       <View >
       <TouchableOpacity onPress={pickImage}>
         <Text style={styles.imagespicertext}>Pick an image</Text>
